@@ -13,10 +13,6 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Build Number Generator
-      uses: einaregilsson/build-number@v1
-      with:
-        token: ${{secrets.github_token}} 
     - name: Build with Gradle
       env: 
         KEY: ${{secrets.github_token}}
