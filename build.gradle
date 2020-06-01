@@ -11,7 +11,7 @@ plugins {
 }
 
 
-group 'com.unrealdinnerbone.config'
+group 'com.unrealdinnerbone'
 
 def ENV = System.getenv()
 def buildNumber = ENV.GITHUB_RUN_NUMBER ? "${ENV.GITHUB_RUN_NUMBER}" : "0"
