@@ -24,8 +24,8 @@ repositories {
 }
 
 dependencies {
-    compile "com.electronwill.night-config:core:3.6.0"
-    compile "com.electronwill.night-config:json:3.6.0"
+    implementation "com.electronwill.night-config:core:3.6.0"
+    implementation "com.electronwill.night-config:json:3.6.0"
 
     implementation "org.projectlombok:lombok:1.18.2"
     annotationProcessor "org.projectlombok:lombok:1.18.2"
