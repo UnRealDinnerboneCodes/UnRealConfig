@@ -5,10 +5,7 @@ import com.unrealdinnerbone.config.api.provider.IProvider;
 import com.unrealdinnerbone.config.impl.provider.EnvProvider;
 import com.unrealdinnerbone.config.impl.provider.FileProvider;
 import com.unrealdinnerbone.config.lib.ConfigUtils;
-import sun.security.krb5.Config;
 
-
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
