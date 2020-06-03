@@ -10,13 +10,15 @@ plugins {
     id "maven-publish"
 }
 
+sourceCompatibility = JavaVersion.VERSION_14
+targetCompatibility = JavaVersion.VERSION_14
 
 group 'com.unrealdinnerbone'
 
 def ENV = System.getenv()
 def buildNumber = ENV.GITHUB_RUN_NUMBER ? "${ENV.GITHUB_RUN_NUMBER}" : "0"
 version = project.getProperty("version") + ("+build." + buildNumber).replace("\\", "")
-sourceCompatibility = 1.8
+
 
 repositories {
     mavenCentral()

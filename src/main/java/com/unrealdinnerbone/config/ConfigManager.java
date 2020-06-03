@@ -41,12 +41,12 @@ public class ConfigManager {
     }
 
 
-    public <T extends IConfig> IConfig[] loadConfigs(T... iConfigs) {
+    public <T extends IConfig> T[] loadConfigs(T... iConfigs) {
         Arrays.stream(iConfigs).forEach(this::loadConfig);
         return iConfigs;
     }
 
-    public <T extends IConfig> IConfig loadConfig(T iConfig) {
+    public <T extends IConfig> T loadConfig(T iConfig) {
         Arrays.stream(iConfig.getClass().getDeclaredFields()).forEach(field ->
                  findValueFor().stream()
                          .map(provider -> provider.get(iConfig.getFolderName(), iConfig.getName(), field.getName()))
