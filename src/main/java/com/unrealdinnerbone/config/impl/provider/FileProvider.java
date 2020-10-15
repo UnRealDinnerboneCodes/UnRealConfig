@@ -7,7 +7,6 @@ import com.unrealdinnerbone.config.api.provider.IProvider;
 import com.unrealdinnerbone.config.lib.ConfigUtils;
 
 import java.io.File;
-import java.util.Optional;
 
 public class FileProvider implements IProvider {
 
@@ -17,12 +16,12 @@ public class FileProvider implements IProvider {
 
 
     @Override
-    public Optional<Object> get(String storeLocation, String configName, String value) {
+    public Object get(String storeLocation, String configName, String value) {
         File configFile = ConfigUtils.getOrCreateFile(storeLocation, configName + ".json");
         ConfigUtils.initEmpty(configFile, JsonFormat.fancyInstance());
         FileConfig fileConfig = FileConfig.of(configFile, JsonFormat.fancyInstance());
         fileConfig.load();
-        return fileConfig.getOptional(value);
+        return fileConfig.getOptional(value).orElse(null);
     }
 
 
