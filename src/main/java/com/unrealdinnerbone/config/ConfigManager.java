@@ -51,7 +51,7 @@ public class ConfigManager {
                  findValueFor().stream()
                          .map(provider -> provider.get(iConfig.getFolderName(), iConfig.getName(), field.getName()))
                 .filter(Objects::nonNull)
-                .findFirst().ifPresent(o -> ConfigUtils.setValueIfField(field, iConfig, o)));
+                .findFirst().ifPresent(o -> ConfigUtils.setValueIfField(field, iConfig, o.orElse(null))));
         return iConfig;
     }
 

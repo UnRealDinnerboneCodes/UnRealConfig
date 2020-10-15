@@ -23,6 +23,15 @@ version = project.getProperty("version") + ("+build." + buildNumber).replace("\\
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        name = "The Name"
+        url = "https://jitpack.io"
+    }
+    maven {
+        url = "https://maven.unreal.codes/repository/unreal/"
+        name = "UnReal Maven"
+    }
+    maven { url "https://oss.jfrog.org/artifactory/libs-release"}
 }
 
 dependencies {
