@@ -3,7 +3,7 @@ package com.unrealdinnerbone.config;
 import com.unrealdinnerbone.config.api.IConfig;
 import com.unrealdinnerbone.config.api.provider.IProvider;
 import com.unrealdinnerbone.config.impl.provider.EnvProvider;
-import com.unrealdinnerbone.config.impl.provider.FileProvider;
+import com.unrealdinnerbone.config.impl.provider.GsonFileProvider;
 import com.unrealdinnerbone.config.lib.ConfigUtils;
 
 import java.util.ArrayList;
@@ -55,8 +55,8 @@ public class ConfigManager {
         return iConfig;
     }
 
-    private ArrayList<IProvider> findValueFor() {
-        return providers.stream().filter(IProvider::canRead).collect(Collectors.toCollection(ArrayList::new));
+    private List<IProvider> findValueFor() {
+        return providers.stream().filter(IProvider::canRead).collect(Collectors.toList());
     }
 
     public ConfigManager doSaving(boolean doSave) {
@@ -65,7 +65,7 @@ public class ConfigManager {
     }
 
     public static ConfigManager createSimplePropertyConfigManger() {
-        return new ConfigManager().doSaving(false).addProvider(FileProvider.FILE_PROVIDER).addProvider(EnvProvider.ENV_PROVIDER);
+        return new ConfigManager().doSaving(false).addProvider(GsonFileProvider.PROVIDER).addProvider(EnvProvider.ENV_PROVIDER);
     }
     public static ConfigManager createSimpleEnvPropertyConfigManger() {
         return new ConfigManager().doSaving(false).addProvider(EnvProvider.ENV_PROVIDER);
