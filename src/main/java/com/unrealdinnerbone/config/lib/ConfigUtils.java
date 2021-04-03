@@ -16,7 +16,7 @@ public class ConfigUtils {
 
     public static Object getValueOfField(Field field, Object object) {
         try {
-            if(!field.isAccessible()) {
+            if(!field.canAccess(object)) {
                 field.setAccessible(true);
             }
             return field.get(object);
@@ -28,7 +28,7 @@ public class ConfigUtils {
 
     public static void setValueIfField(Field field, IConfig classObject, Object object){
         try {
-            if(!field.canAccess(object)) {
+            if(!field.canAccess(classObject)) {
                 field.setAccessible(true);
             }
             field.set(classObject, object);
