@@ -6,10 +6,7 @@ import com.unrealdinnerbone.config.impl.provider.EnvProvider;
 import com.unrealdinnerbone.config.impl.provider.GsonFileProvider;
 import com.unrealdinnerbone.config.lib.ConfigUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ConfigManager {
@@ -50,8 +47,11 @@ public class ConfigManager {
         Arrays.stream(iConfig.getClass().getDeclaredFields()).forEach(field ->
                  findValueFor().stream()
                          .map(provider -> provider.get(iConfig.getFolderName(), iConfig.getName(), field.getName()))
-                .filter(Objects::nonNull)
-                .findFirst().ifPresent(o -> ConfigUtils.setValueIfField(field, iConfig, o)));
+                .filter(Optional::isPresent)
+                .findFirst()
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .ifPresent(o -> ConfigUtils.setValueIfField(field, iConfig, o)));
         return iConfig;
     }
 
