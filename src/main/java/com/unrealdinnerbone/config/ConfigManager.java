@@ -1,9 +1,8 @@
 package com.unrealdinnerbone.config;
 
 import com.unrealdinnerbone.config.api.IConfig;
-import com.unrealdinnerbone.config.api.provider.IProvider;
+import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.impl.provider.EnvProvider;
-import com.unrealdinnerbone.config.impl.provider.GsonFileProvider;
 import com.unrealdinnerbone.config.lib.ConfigUtils;
 
 import java.util.*;
@@ -64,9 +63,6 @@ public class ConfigManager {
         return this;
     }
 
-    public static ConfigManager createSimplePropertyConfigManger() {
-        return new ConfigManager().doSaving(false).addProvider(GsonFileProvider.PROVIDER).addProvider(EnvProvider.ENV_PROVIDER);
-    }
     public static ConfigManager createSimpleEnvPropertyConfigManger() {
         return new ConfigManager().doSaving(false).addProvider(EnvProvider.ENV_PROVIDER);
     }

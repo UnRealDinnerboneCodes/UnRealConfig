@@ -10,6 +10,11 @@ plugins {
     id "maven-publish"
 }
 
+sourceSets {
+    api
+    json
+}
+
 sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16
 
@@ -18,10 +23,10 @@ group 'com.unrealdinnerbone'
 def ENV = System.getenv()
 def buildNumber = ENV.GITHUB_RUN_NUMBER ? "${ENV.GITHUB_RUN_NUMBER}" : "0"
 version = project.getProperty("version") + ("+build." + buildNumber).replace("\\", "")
+archivesBaseName = "UnRealConfig"
 
 repositories {
     mavenCentral()
-    jcenter()
     maven {
         name = "The Name"
         url = "https://jitpack.io"
@@ -33,15 +38,51 @@ repositories {
     maven { url "https://oss.jfrog.org/artifactory/libs-release"}
 }
 
+task jsonJar(type:Jar) {
+    archiveClassifier = "json"
+    from sourceSets.json.output
+}
+
+task coreJar(type: Jar) {
+    archiveClassifier = "core"
+    from sourceSets.main.output
+}
+task apiJar(type: Jar) {
+    archiveClassifier = "api"
+    from sourceSets.api.output
+}
+artifacts {
+    jsonJar
+}
+
+build {
+    dependsOn jsonJar
+    dependsOn coreJar
+    dependsOn apiJar
+}
+
+jar {
+    archiveName(archivesBaseName + "-" + version + ".jar")
+    from sourceSets.api.output
+    dependsOn apiClasses
+    from sourceSets.json.output
+    dependsOn jsonClasses
+}
+
 dependencies {
-    implementation "com.electronwill.night-config:json:3.6.3"
+    implementation sourceSets.api.output
+    jsonImplementation sourceSets.api.output
+    jsonImplementation sourceSets.main.output
+    jsonImplementation("com.electronwill.night-config:json:3.6.3")
 }
 
 publishing {
     publications {
         maven(MavenPublication) {
-            from components.java
-            version = project.getProperty("version")
+            artifact jar
+            artifact jsonJar
+            artifact coreJar
+            artifact apiJar
         }
     }
 

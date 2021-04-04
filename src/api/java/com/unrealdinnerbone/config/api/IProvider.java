@@ -1,4 +1,4 @@
-package com.unrealdinnerbone.config.api.provider;
+package com.unrealdinnerbone.config.api;
 
 import java.util.Optional;
 

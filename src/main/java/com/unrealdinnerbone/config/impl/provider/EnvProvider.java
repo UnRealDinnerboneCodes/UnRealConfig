@@ -1,6 +1,6 @@
 package com.unrealdinnerbone.config.impl.provider;
 
-import com.unrealdinnerbone.config.api.provider.IProvider;
+import com.unrealdinnerbone.config.api.IProvider;
 
 import java.util.Optional;
 

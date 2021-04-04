@@ -1,12 +1,7 @@
 package com.unrealdinnerbone.config.lib;
 
-import com.electronwill.nightconfig.core.ConfigFormat;
 import com.unrealdinnerbone.config.api.IConfig;
 
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
@@ -34,16 +29,6 @@ public class ConfigUtils {
             field.set(classObject, object);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-        }
-    }
-
-
-    public static void initEmpty(Path path, ConfigFormat<?> format) throws IOException {
-        if(!Files.exists(path)) {
-            Files.createFile(path);
-        }
-        if(Files.readString(path).isEmpty()) {
-            format.initEmptyFile(path);
         }
     }
 
