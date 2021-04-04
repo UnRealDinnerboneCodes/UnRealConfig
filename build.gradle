@@ -7,11 +7,12 @@ buildscript {
 
 plugins {
     id 'java'
+    id 'java-library'
     id "maven-publish"
 }
 
 sourceSets {
-    api
+    apii
     json
 }
 
@@ -47,9 +48,9 @@ task coreJar(type: Jar) {
     archiveClassifier = "core"
     from sourceSets.main.output
 }
-task apiJar(type: Jar) {
+task apiiJar(type: Jar) {
     archiveClassifier = "api"
-    from sourceSets.api.output
+    from sourceSets.apii.output
 }
 artifacts {
     jsonJar
@@ -58,20 +59,23 @@ artifacts {
 build {
     dependsOn jsonJar
     dependsOn coreJar
-    dependsOn apiJar
+    dependsOn apiiJar
 }
 
 jar {
     archiveName(archivesBaseName + "-" + version + ".jar")
-    from sourceSets.api.output
-    dependsOn apiClasses
+    from sourceSets.apii.output
+    dependsOn apiiClasses
     from sourceSets.json.output
     dependsOn jsonClasses
 }
 
 dependencies {
-    implementation sourceSets.api.output
-    jsonImplementation sourceSets.api.output
+    api sourceSets.apii.output
+//    jsonApi sourceSets.main.output
+//    jsonApi sourceSets.main.output
+//    jsonApi sourceSets.main.output
+    jsonImplementation sourceSets.apii.output
     jsonImplementation sourceSets.main.output
     jsonImplementation("com.electronwill.night-config:json:3.6.3")
 }
@@ -81,8 +85,8 @@ publishing {
         maven(MavenPublication) {
             artifact jar
             artifact jsonJar
-            artifact coreJar
-            artifact apiJar
+            artifact (coreJar)
+            artifact apiiJar
         }
     }
 
