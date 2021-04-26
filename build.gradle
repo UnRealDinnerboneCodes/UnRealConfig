@@ -1,92 +1,35 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        mavenLocal()
-    }
-}
-
 plugins {
     id 'java'
-    id 'java-library'
     id "maven-publish"
 }
-
-sourceSets {
-    apii
-    json
-}
-
-sourceCompatibility = JavaVersion.VERSION_16
-targetCompatibility = JavaVersion.VERSION_16
 
 group 'com.unrealdinnerbone'
 
 def ENV = System.getenv()
 def buildNumber = ENV.GITHUB_RUN_NUMBER ? "${ENV.GITHUB_RUN_NUMBER}" : "0"
 version = project.getProperty("version") + ("+build." + buildNumber).replace("\\", "")
+
 archivesBaseName = "UnRealConfig"
+
+configurations {
+    api
+    implementation.extendsFrom api
+    apiElements.extendsFrom api
+}
 
 repositories {
     mavenCentral()
-    maven {
-        name = "The Name"
-        url = "https://jitpack.io"
-    }
-    maven {
-        url = "https://maven.unreal.codes/repository/unreal/"
-        name = "UnReal Maven"
-    }
-    maven { url "https://oss.jfrog.org/artifactory/libs-release"}
-}
-
-task jsonJar(type:Jar) {
-    archiveClassifier = "json"
-    from sourceSets.json.output
-}
-
-task coreJar(type: Jar) {
-    archiveClassifier = "core"
-    from sourceSets.main.output
-}
-task apiiJar(type: Jar) {
-    archiveClassifier = "api"
-    from sourceSets.apii.output
-}
-artifacts {
-    jsonJar
-}
-
-build {
-    dependsOn jsonJar
-    dependsOn coreJar
-    dependsOn apiiJar
-}
-
-jar {
-    archiveName(archivesBaseName + "-" + version + ".jar")
-    from sourceSets.apii.output
-    dependsOn apiiClasses
-    from sourceSets.json.output
-    dependsOn jsonClasses
 }
 
 dependencies {
-    api sourceSets.apii.output
-//    jsonApi sourceSets.main.output
-//    jsonApi sourceSets.main.output
-//    jsonApi sourceSets.main.output
-    jsonImplementation sourceSets.apii.output
-    jsonImplementation sourceSets.main.output
-    jsonImplementation("com.electronwill.night-config:json:3.6.3")
+    api("com.electronwill.night-config:json:" + project.property("night_config"))
 }
 
 publishing {
     publications {
         maven(MavenPublication) {
-            artifact jar
-            artifact jsonJar
-            artifact (coreJar)
-            artifact apiiJar
+            from components.java
+            version = project.getProperty("version")
         }
     }
 
@@ -102,4 +45,10 @@ publishing {
     }
 }
 
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(16)
+    }
+}
 
