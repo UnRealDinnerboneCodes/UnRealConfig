@@ -13,23 +13,21 @@ archivesBaseName = "UnRealConfig"
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        mavenJava(MavenPublication) {
             from components.java
-            version = project.getProperty("version")
         }
     }
-
     repositories {
         maven {
-            url "https://maven.unreal.codes/repository/unreal/"
+            url "https://maven.unreal.codes/releases"
             credentials {
                 username ENV.MAVEN_USERNAME
                 password ENV.MAVEN_PASSWORD
             }
-
         }
     }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+
 
