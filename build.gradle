@@ -11,20 +11,6 @@ version = project.getProperty("version") + ("+build." + buildNumber).replace("\\
 
 archivesBaseName = "UnRealConfig"
 
-configurations {
-    api
-    implementation.extendsFrom api
-    apiElements.extendsFrom api
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    api("com.electronwill.night-config:json:" + project.property("night_config"))
-}
-
 publishing {
     publications {
         maven(MavenPublication) {
@@ -45,10 +31,5 @@ publishing {
     }
 }
 
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(16)
-    }
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
