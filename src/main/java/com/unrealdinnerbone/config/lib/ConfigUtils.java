@@ -31,17 +31,4 @@ public class ConfigUtils {
             e.printStackTrace();
         }
     }
-
-    public static Path getOrCreateFile(String name, String fileName) throws IOException {
-        Path path = Path.of(name);
-        if(!Files.exists(path)) {
-            Files.createDirectories(path);
-        }
-        Path path1 = Path.of(name, fileName);
-        if(!Files.exists(path1)) {
-            Files.createFile(path1);
-        }
-        return path1;
-    }
-
 }
