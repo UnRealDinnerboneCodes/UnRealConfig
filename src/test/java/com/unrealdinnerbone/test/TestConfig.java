@@ -8,7 +8,7 @@ public class TestConfig {
     private final BooleanConfig booleanConfig;
 
     public TestConfig(IConfigCreator creator) {
-        this.booleanConfig = creator.create("booleanConfig", true, BooleanConfig::new);
+        this.booleanConfig = creator.createBoolean("booleanConfig", true);
     }
 
     public boolean getBooleanConfig() {
