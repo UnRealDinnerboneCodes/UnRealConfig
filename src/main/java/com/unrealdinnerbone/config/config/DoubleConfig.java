@@ -2,13 +2,13 @@ package com.unrealdinnerbone.config.config;
 
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
-import com.unrealdinnerbone.config.api.Namespace;
+import com.unrealdinnerbone.config.api.ID;
 import org.jetbrains.annotations.NotNull;
 
 public class DoubleConfig extends ConfigValue<Double> {
 
 
-    public DoubleConfig(Namespace id, IProvider provider, Double defaultValue) {
+    public DoubleConfig(ID id, IProvider provider, Double defaultValue) {
         super(id, provider, defaultValue);
     }
 

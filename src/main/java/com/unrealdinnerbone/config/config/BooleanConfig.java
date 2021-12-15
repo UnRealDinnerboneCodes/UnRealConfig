@@ -2,7 +2,7 @@ package com.unrealdinnerbone.config.config;
 
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
-import com.unrealdinnerbone.config.api.Namespace;
+import com.unrealdinnerbone.config.api.ID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -12,7 +12,7 @@ public class BooleanConfig extends ConfigValue<Boolean> {
 
     private final List<String> TYPES = Arrays.asList("true", "false");
 
-    public BooleanConfig(Namespace id, IProvider provider, Boolean defaultValue) {
+    public BooleanConfig(ID id, IProvider provider, Boolean defaultValue) {
         super(id, provider, defaultValue);
     }
 

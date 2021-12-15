@@ -2,7 +2,7 @@ package com.unrealdinnerbone.config;
 
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
-import com.unrealdinnerbone.config.api.Namespace;
+import com.unrealdinnerbone.config.api.ID;
 import com.unrealdinnerbone.config.config.*;
 
 public interface IConfigCreator {
@@ -17,7 +17,7 @@ public interface IConfigCreator {
     }
 
     default <E extends Enum<E>> EnumConfig<E> createEnum(String key, E defaultValue, Class<E> eClass) {
-        return create(key, defaultValue, (Namespace namespace, IProvider provider, E defaultValue1) -> {
+        return create(key, defaultValue, (ID namespace, IProvider provider, E defaultValue1) -> {
             return new EnumConfig<>(namespace, provider, defaultValue1, eClass);
         });
     }

@@ -2,16 +2,13 @@ package com.unrealdinnerbone.config;
 
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
-import com.unrealdinnerbone.config.api.Namespace;
+import com.unrealdinnerbone.config.api.ID;
 import com.unrealdinnerbone.config.impl.provider.EnvProvider;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class ConfigManager {
 
@@ -29,7 +26,7 @@ public class ConfigManager {
         return configFunction.apply(new IConfigCreator() {
             @Override
             public <D, R extends ConfigValue<D>> R create(String key, D defaultValue, ConfigCreator<D, R> function) {
-                R configValue = function.apply(Namespace.of(id, key), provider, defaultValue);
+                R configValue = function.apply(ID.of(id, key), provider, defaultValue);
                 configs.add(configValue);
                 return configValue;
             }

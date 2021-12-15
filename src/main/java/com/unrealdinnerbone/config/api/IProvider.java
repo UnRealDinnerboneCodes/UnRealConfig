@@ -4,12 +4,12 @@ import java.util.Optional;
 
 public interface IProvider {
 
-    <T> Optional<Object> get(Namespace id, T defaultValue);
+    <T> Optional<Object> get(ID id, T defaultValue);
 
-    default <T> boolean save(Namespace id, T value) {
+    default <T> boolean save(ID id, T value) {
         return false;
     }
 
-    default <T> void setDefault(Namespace id, T defaultValue) {};
+    default <T> void setDefault(ID id, T defaultValue) {};
 
 }

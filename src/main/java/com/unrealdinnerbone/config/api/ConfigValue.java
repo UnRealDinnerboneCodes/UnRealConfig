@@ -7,11 +7,11 @@ import java.util.List;
 
 public abstract class ConfigValue<T> {
 
-    private final Namespace id;
+    private final ID id;
     private final T defaultValue;
     protected final IProvider provider;
 
-    public ConfigValue(Namespace id, IProvider provider, T defaultValue) {
+    public ConfigValue(ID id, IProvider provider, T defaultValue) {
         this.id = id;
         this.provider = provider;
         this.defaultValue = defaultValue;
@@ -31,7 +31,7 @@ public abstract class ConfigValue<T> {
     @NotNull
     public abstract <O> T fromObject(O o) throws IllegalArgumentException;
 
-    public Namespace getId() {
+    public ID getId() {
         return id;
     }
 
