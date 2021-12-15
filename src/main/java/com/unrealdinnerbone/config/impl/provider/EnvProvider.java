@@ -13,6 +13,6 @@ public class EnvProvider implements IProvider {
 
     @Override
     public <T> Optional<Object> get(Namespace id, T defaultValue) {
-        return Optional.ofNullable(System.getenv().getOrDefault(id.toString(), defaultValue.toString()));
+        return Optional.ofNullable(System.getenv().getOrDefault(id.toString().replace(".",":"), defaultValue.toString()));
     }
 }
