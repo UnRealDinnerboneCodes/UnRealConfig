@@ -1,22 +1,18 @@
 package com.unrealdinnerbone.test;
 
-import com.unrealdinnerbone.config.api.IConfig;
+import com.unrealdinnerbone.config.api.IProvider;
+import com.unrealdinnerbone.config.api.Namespace;
+import com.unrealdinnerbone.config.config.BooleanConfig;
 
-public class TestConfig implements IConfig {
+public class TestConfig {
 
-    private String test;
+    private final BooleanConfig booleanConfig;
 
-    @Override
-    public String getName() {
-        return "test";
+    public TestConfig(IProvider provider) {
+        this.booleanConfig = new BooleanConfig(Namespace.of("test", "boolean_test"), provider, true);
     }
 
-    @Override
-    public String getFolderName() {
-        return "test";
-    }
-
-    public String getTest() {
-        return test;
+    public boolean getBooleanConfig() {
+        return booleanConfig.getValue();
     }
 }

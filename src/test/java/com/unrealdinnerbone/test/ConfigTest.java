@@ -1,21 +1,21 @@
 package com.unrealdinnerbone.test;
 
 import com.unrealdinnerbone.config.ConfigManager;
-import com.unrealdinnerbone.config.api.IConfig;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class ConfigTest
 {
-
     @Test
     public void testConfig() {
-        ConfigManager configManager = new ConfigManager()
-                .doSaving(false)
-                .addProvider(new TestProvider(s -> "cake"));
+        assertTrue(new ConfigManager(new TestProvider(s -> "true")).loadConfig(TestConfig::new).getBooleanConfig());
+    }
 
-        TestConfig testConfig = configManager.loadConfig(new TestConfig());
+    @Test
+    public void testBadBoolean() {
+        assertThrows(IllegalArgumentException.class, () -> new ConfigManager(new TestProvider(s -> "cake")).loadConfig(TestConfig::new).getBooleanConfig());
 
-        Assert.assertEquals(testConfig.getTest(), "cake");
     }
 }

@@ -4,17 +4,12 @@ import java.util.Optional;
 
 public interface IProvider {
 
-    Optional<Object> get(String storeLocation, String configName, String value);
+    <T> Optional<Object> get(Namespace id, T defaultValue);
 
-    default boolean save(String storeLocation, String configName, String value, Object object) {
+    default <T> boolean save(Namespace id, T value) {
         return false;
     }
 
-    default boolean canSave() {
-        return false;
-    }
+    default <T> void setDefault(Namespace id, T defaultValue) {};
 
-    default boolean canRead() {
-        return true;
-    }
 }
