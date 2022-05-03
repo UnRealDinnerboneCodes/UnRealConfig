@@ -2,6 +2,7 @@ package com.unrealdinnerbone.config.api;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,10 +20,9 @@ public abstract class ConfigValue<T> {
         set(defaultValue);
     }
 
-    public void setValue(T value) {
-        save(value);
+    public boolean setValue(T value) {
+        return save(value);
     }
-
 
     public <O> void set(O value) throws IllegalArgumentException {
         setValue(fromObject(value));
@@ -39,6 +39,12 @@ public abstract class ConfigValue<T> {
         return provider.get(id, defaultValue).map(this::fromObject).orElse(null);
     }
 
+    public List<String> getExampleValues() {
+        List<String> list = new ArrayList<>(getExamples());
+        list.add(getDefaultValue().toString());
+        return list;
+    }
+
     public List<String> getExamples() {
         return Collections.emptyList();
     }
@@ -47,7 +53,7 @@ public abstract class ConfigValue<T> {
         return defaultValue;
     }
 
-    public void save(T t) {
-        provider.save(id, t);
+    public boolean save(T t) {
+        return provider.save(id, t);
     }
 }
