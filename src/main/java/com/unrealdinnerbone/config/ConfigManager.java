@@ -8,6 +8,7 @@ import com.unrealdinnerbone.config.impl.provider.EnvProvider;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class ConfigManager {
@@ -39,6 +40,11 @@ public class ConfigManager {
 
     public static List<ConfigValue<?>> getAllConfigs() {
         return managers.stream().map(ConfigManager::getConfigs).flatMap(Collection::stream).toList();
+    }
+
+
+    public static Optional<ConfigValue<?>> findConfig(ID id) {
+        return getAllConfigs().stream().filter(config -> config.getId().is(id)).findFirst();
     }
 
     public static ConfigManager createSimpleEnvPropertyConfigManger() {

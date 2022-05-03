@@ -14,6 +14,10 @@ public record ID(String key, String value) {
         return toString().toLowerCase().equals(key.toLowerCase() + ":" + value.toLowerCase());
     }
 
+    public boolean is(ID id) {
+        return toString().equalsIgnoreCase(id.toString());
+    }
+
     public String toString(String split) {
         return key + split + value;
     }
