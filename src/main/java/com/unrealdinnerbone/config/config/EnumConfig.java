@@ -13,9 +13,9 @@ public class EnumConfig<T extends Enum<T>> extends ConfigValue<T> {
     private final Map<String, T> idMap = new HashMap<>();
     private final List<String> examples;
 
-    public EnumConfig(ID id, IProvider provider, T defaultValue, Class<T> clazz, Class<T> type) {
+    public EnumConfig(ID id, IProvider provider, T defaultValue, Class<T> clazz) {
         super(id, provider, defaultValue);
-        this.type = type;
+        this.type = clazz;
         Arrays.stream(clazz.getEnumConstants()).forEach(enumConstant -> idMap.put(enumConstant.name().toLowerCase(), enumConstant));
         examples = idMap.keySet().stream().toList();
     }
