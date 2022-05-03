@@ -33,4 +33,9 @@ public class BooleanConfig extends ConfigValue<Boolean> {
         return TYPES;
     }
 
+    @Override
+    public Class<Boolean> getClassType() {
+        return Boolean.TYPE;
+    }
+
 }

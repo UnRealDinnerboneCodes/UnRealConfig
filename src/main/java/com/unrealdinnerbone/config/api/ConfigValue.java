@@ -56,4 +56,6 @@ public abstract class ConfigValue<T> {
     public boolean save(T t) {
         return provider.save(id, t);
     }
+
+    public abstract Class<T> getClassType();
 }

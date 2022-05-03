@@ -12,6 +12,11 @@ public class IntegerConfig extends ConfigValue<Integer> {
     }
 
     @Override
+    public Class<Integer> getClassType() {
+        return Integer.TYPE;
+    }
+
+    @Override
     public @NotNull Integer fromObject(Object o) {
         return Integer.parseInt(String.valueOf(o));
     }

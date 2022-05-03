@@ -12,6 +12,11 @@ public class StringConfig extends ConfigValue<String> {
     }
 
     @Override
+    public Class<String> getClassType() {
+        return String.class;
+    }
+
+    @Override
     public @NotNull String fromObject(Object o) {
         return o.toString();
     }

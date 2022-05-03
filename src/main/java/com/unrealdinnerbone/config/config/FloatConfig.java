@@ -12,6 +12,11 @@ public class FloatConfig extends ConfigValue<Float> {
     }
 
     @Override
+    public Class<Float> getClassType() {
+        return Float.TYPE;
+    }
+
+    @Override
     public @NotNull Float fromObject(Object o) {
         return Float.parseFloat(String.valueOf(o));
     }
