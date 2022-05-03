@@ -18,7 +18,7 @@ public interface IConfigCreator {
 
     default <E extends Enum<E>> EnumConfig<E> createEnum(String key, E defaultValue, Class<E> eClass) {
         return create(key, defaultValue, (ID namespace, IProvider provider, E defaultValue1) -> {
-            return new EnumConfig<>(namespace, provider, defaultValue1, eClass, type);
+            return new EnumConfig<>(namespace, provider, defaultValue1, eClass);
         });
     }
 
