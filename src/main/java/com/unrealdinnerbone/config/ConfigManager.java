@@ -3,12 +3,14 @@ package com.unrealdinnerbone.config;
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.api.ID;
+import com.unrealdinnerbone.config.impl.BasicCreator;
 import com.unrealdinnerbone.config.impl.provider.EnvProvider;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ConfigManager {
@@ -23,18 +25,14 @@ public class ConfigManager {
     }
 
     public <A> A loadConfig(String id, Function<IConfigCreator, A> configFunction) {
-        return add(iProvider -> configFunction.apply(new IConfigCreator() {
-            @Override
-            public <D, R extends ConfigValue<D>> R create(String key, D defaultValue, ConfigCreator<D, R> function) {
-                return function.apply(ID.of(id, key), provider, defaultValue);
-            }
-        }));
+        return configFunction.apply(new BasicCreator(id, provider, configs::add));
     }
 
-    public <T> T add(Function<IProvider, T> function) {
-        T configValue = function.apply(provider);
-        configs.add((ConfigValue<?>) configValue);
-        return configValue;
+    public <T> T loadConfig(String id, Function<IConfigCreator, T> configFunction, Consumer<ConfigValue<?>> consumer) {
+        return configFunction.apply(new BasicCreator(id, provider, configValue -> {
+            configs.add(configValue);
+            consumer.accept(configValue);
+        }));
     }
 
     public List<ConfigValue<?>> getConfigs() {
