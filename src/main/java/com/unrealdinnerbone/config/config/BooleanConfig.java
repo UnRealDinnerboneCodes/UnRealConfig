@@ -18,8 +18,8 @@ public class BooleanConfig extends ConfigValue<Boolean> {
 
     @Override
     public @NotNull Boolean fromObject(Object o) {
-        if (o instanceof Boolean) {
-            return true;
+        if (o instanceof Boolean booleanValue) {
+            return booleanValue;
         }else {
             if (o instanceof String s && (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false"))) {
                 return Boolean.parseBoolean(((String) o));

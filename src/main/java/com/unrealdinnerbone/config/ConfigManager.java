@@ -17,21 +17,24 @@ public class ConfigManager {
     private final List<ConfigValue<?>> configs = new ArrayList<>();
     private final IProvider provider;
 
-
     public ConfigManager(IProvider provider) {
         this.provider = provider;
         managers.add(this);
     }
 
-    public <T, A> A loadConfig(String id, Function<IConfigCreator, A> configFunction) {
-        return configFunction.apply(new IConfigCreator() {
+    public <A> A loadConfig(String id, Function<IConfigCreator, A> configFunction) {
+        return add(iProvider -> configFunction.apply(new IConfigCreator() {
             @Override
             public <D, R extends ConfigValue<D>> R create(String key, D defaultValue, ConfigCreator<D, R> function) {
-                R configValue = function.apply(ID.of(id, key), provider, defaultValue);
-                configs.add(configValue);
-                return configValue;
+                return function.apply(ID.of(id, key), provider, defaultValue);
             }
-        });
+        }));
+    }
+
+    public <T> T add(Function<IProvider, T> function) {
+        T configValue = function.apply(provider);
+        configs.add((ConfigValue<?>) configValue);
+        return configValue;
     }
 
     public List<ConfigValue<?>> getConfigs() {

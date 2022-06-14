@@ -7,5 +7,5 @@ plugins {
 apply from: 'https://raw.githubusercontent.com/UnRealDinnerbone/GradleHelpers/helpers/base.gradle'
 
 dependencies {
-    api 'org.jetbrains:annotations:22.0.0'
+    api 'org.jetbrains:annotations:23.0.0'
 }
