@@ -11,11 +11,24 @@ public abstract class ConfigValue<T> {
     private final ID id;
     private final T defaultValue;
     protected final IProvider provider;
+    private final CachedValue<T> activeValue;
+    private final CachedValue<List<String>> examples;
 
     public ConfigValue(ID id, IProvider provider, T defaultValue) {
         this.id = id;
         this.provider = provider;
         this.defaultValue = defaultValue;
+        this.activeValue = new CachedValue<>(() -> provider.get(id).map(this::fromObject).orElse(defaultValue));
+        this.examples = new CachedValue<>(() -> {
+            List<String> list = new ArrayList<>(getExamples());
+            String theDefaultValue = getDefaultValue().toString();
+            String theActiveValue = activeValue.get().toString();
+            list.add(theDefaultValue);
+            if(!theActiveValue.equals(theDefaultValue)) {
+                list.add(theActiveValue);
+            }
+            return list;
+        });
         provider.setDefault(id, defaultValue);
         set(defaultValue);
     }
@@ -36,13 +49,11 @@ public abstract class ConfigValue<T> {
     }
 
     public T getValue() {
-        return provider.get(id, defaultValue).map(this::fromObject).orElse(null);
+        return activeValue.get();
     }
 
     public List<String> getExampleValues() {
-        List<String> list = new ArrayList<>(getExamples());
-        list.add(getDefaultValue().toString());
-        return list;
+        return examples.get();
     }
 
     public List<String> getExamples() {
@@ -53,7 +64,9 @@ public abstract class ConfigValue<T> {
         return defaultValue;
     }
 
-    public boolean save(T t) {
+    private boolean save(T t) {
+        activeValue.invalidate();
+        examples.invalidate();
         return provider.save(id, t);
     }
 

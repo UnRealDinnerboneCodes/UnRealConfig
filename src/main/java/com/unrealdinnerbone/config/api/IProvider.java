@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public interface IProvider {
 
-    <T> Optional<Object> get(ID id, T defaultValue);
+    <T> Optional<Object> get(ID id);
 
     default <T> boolean save(ID id, T value) {
         return false;

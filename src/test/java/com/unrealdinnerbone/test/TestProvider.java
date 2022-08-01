@@ -9,7 +9,8 @@ import java.util.function.Function;
 public record TestProvider(Function<String, Object> function) implements IProvider {
 
     @Override
-    public <T> Optional<Object> get(ID id, T defaultValue) {
+    public <T> Optional<Object> get(ID id) {
         return Optional.ofNullable(function.apply(id.toString()));
     }
+
 }

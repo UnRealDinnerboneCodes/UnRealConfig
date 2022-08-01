@@ -10,7 +10,9 @@ public class ConfigTest
 {
     @Test
     public void testConfig() {
-        assertTrue(new ConfigManager(new TestProvider(s -> "true")).loadConfig("test", TestConfig::new).getBooleanConfig());
+        ConfigManager configManager = new ConfigManager(new TestProvider(s -> "true"));
+        TestConfig testConfig = configManager.loadConfig("test", TestConfig::new);
+        assertTrue(testConfig.getBooleanConfig());
     }
 
     @Test
