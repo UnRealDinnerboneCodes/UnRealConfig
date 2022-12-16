@@ -12,7 +12,6 @@ public record BasicCreator(String id, IProvider provider, Consumer<ConfigValue<?
 
     @Override
     public <D, R extends ConfigValue<D>> R create(String key, D defaultValue, ConfigCreator<D, R> function) {
-        System.out.println(id + key);
         R apply = function.apply(ID.of(id, key), provider, defaultValue);
         creationCallback.accept(apply);
         return apply;

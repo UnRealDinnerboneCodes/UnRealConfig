@@ -18,7 +18,9 @@ public abstract class ConfigValue<T> {
         this.id = id;
         this.provider = provider;
         this.defaultValue = defaultValue;
-        this.activeValue = new CachedValue<>(() -> provider.get(id).map(this::fromObject).orElse(defaultValue));
+        this.activeValue = new CachedValue<>(() -> provider.get(id)
+                        .map(this::fromObject)
+                        .orElse(defaultValue));
         this.examples = new CachedValue<>(() -> {
             List<String> list = new ArrayList<>(getExamples());
             String theDefaultValue = getDefaultValue().toString();
@@ -71,4 +73,9 @@ public abstract class ConfigValue<T> {
     }
 
     public abstract Class<T> getClassType();
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

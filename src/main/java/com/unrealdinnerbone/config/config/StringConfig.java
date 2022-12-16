@@ -18,7 +18,7 @@ public class StringConfig extends ConfigValue<String> {
 
     @Override
     public @NotNull String fromObject(Object o) {
-        return o.toString();
+        return o == null ? "" : o.toString();
     }
 
 }

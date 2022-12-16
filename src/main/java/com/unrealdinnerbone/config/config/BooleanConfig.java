@@ -20,10 +20,8 @@ public class BooleanConfig extends ConfigValue<Boolean> {
     public @NotNull Boolean fromObject(Object o) {
         if (o instanceof Boolean booleanValue) {
             return booleanValue;
-        }else {
-            if (o instanceof String s && (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false"))) {
-                return Boolean.parseBoolean(((String) o));
-            }
+        }else if (o instanceof String s && (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false"))) {
+            return Boolean.parseBoolean(s);
         }
         throw new IllegalArgumentException(o + " is not a valid boolean value");
     }

@@ -13,7 +13,6 @@ public class CachedValue<T> {
         this.cachedGetter = cachedGetter;
     }
 
-
     public T get() {
         if(currentValue == null) {
             currentValue = cachedGetter.get();
