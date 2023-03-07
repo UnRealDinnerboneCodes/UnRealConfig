@@ -1,5 +1,7 @@
 package com.unrealdinnerbone.config.api;
 
+import com.unrealdinnerbone.unreallib.CachedValue;
+import com.unrealdinnerbone.unreallib.Namespace;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -8,19 +10,19 @@ import java.util.List;
 
 public abstract class ConfigValue<T> {
 
-    private final ID id;
+    private final Namespace id;
     private final T defaultValue;
     protected final IProvider provider;
     private final CachedValue<T> activeValue;
     private final CachedValue<List<String>> examples;
 
-    public ConfigValue(ID id, IProvider provider, T defaultValue) {
+    public ConfigValue(Namespace id, IProvider provider, T defaultValue) {
         this.id = id;
         this.provider = provider;
         this.defaultValue = defaultValue;
         this.activeValue = new CachedValue<>(() -> provider.get(id)
-                        .map(this::fromObject)
-                        .orElse(defaultValue));
+                .map(this::fromObject)
+                .orElse(defaultValue));
         this.examples = new CachedValue<>(() -> {
             List<String> list = new ArrayList<>(getExamples());
             String theDefaultValue = getDefaultValue().toString();
@@ -46,7 +48,7 @@ public abstract class ConfigValue<T> {
     @NotNull
     public abstract <O> T fromObject(O o) throws IllegalArgumentException;
 
-    public ID getId() {
+    public Namespace getId() {
         return id;
     }
 

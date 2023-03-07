@@ -1,10 +1,9 @@
 package com.unrealdinnerbone.config;
 
 import com.unrealdinnerbone.config.api.ConfigValue;
-import com.unrealdinnerbone.config.api.ID;
 import com.unrealdinnerbone.config.api.IProvider;
-import com.unrealdinnerbone.config.impl.BasicCreator;
 import com.unrealdinnerbone.config.impl.provider.EnvProvider;
+import com.unrealdinnerbone.unreallib.Namespace;
 
 import java.util.*;
 import java.util.function.Function;
@@ -18,15 +17,10 @@ public class ConfigManager {
     public ConfigManager(IProvider provider) {
         this.provider = provider;
         managers.add(this);
+
     }
-
-    public <T> T loadConfig(String id, Function<IConfigCreator, T> configFunction) {
-        return loadConfigFromCreator(id, BasicCreator::new, configFunction);
-    }
-
-    public <T> T loadConfigFromCreator(String id, ICreator creator, Function<IConfigCreator, T> configFunction) {
-        return configFunction.apply(creator.create(id, provider, configs::add));
-
+    public <T> T loadConfig(String id, Function<ConfigCreator, T> configFunction) {
+        return configFunction.apply(new ConfigCreator(id, provider, configs::add));
     }
 
     public Set<ConfigValue<?>> getConfigs() {
@@ -38,7 +32,7 @@ public class ConfigManager {
     }
 
 
-    public static Optional<ConfigValue<?>> findConfig(ID id) {
+    public static Optional<ConfigValue<?>> findConfig(Namespace id) {
         return getAllConfigs().stream()
                 .filter(config -> config.getId().is(id))
                 .findFirst();
