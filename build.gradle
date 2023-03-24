@@ -7,7 +7,7 @@ plugins {
 apply from: 'https://raw.githubusercontent.com/UnRealDinnerbone/GradleHelpers/helpers/base.gradle'
 
 dependencies {
-    api 'com.unrealdinnerbone:UnRealLib-core:7.0.0+build.140'
+    api 'com.unrealdinnerbone:UnRealLib-core:7.0.0+build.148'
 }
 
 compileJava {
