@@ -9,3 +9,7 @@ apply from: 'https://raw.githubusercontent.com/UnRealDinnerbone/GradleHelpers/he
 dependencies {
     api 'com.unrealdinnerbone:UnRealLib-core:7.0.0+build.140'
 }
+
+compileJava {
+    options.release = 17
+}

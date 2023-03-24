@@ -34,7 +34,7 @@ public abstract class ConfigValue<T> {
             return list;
         });
         provider.setDefault(id, defaultValue);
-        set(defaultValue);
+        setValue(defaultValue);
     }
 
     public boolean setValue(T value) {

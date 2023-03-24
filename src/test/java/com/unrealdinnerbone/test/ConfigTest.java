@@ -11,14 +11,14 @@ public class ConfigTest
     public void testConfig() {
         ConfigManager configManager = new ConfigManager(new TestProvider(s -> "true"));
         TestConfig testConfig = configManager.loadConfig("test", TestConfig::new);
-        assertTrue(testConfig.getBooleanConfig());
+        assertTrue(testConfig.booleanConfig.getValue());
     }
 
     @Test
     public void testBadBoolean() {
         assertThrows(IllegalArgumentException.class, () -> new ConfigManager(new TestProvider(s -> "cake"))
                 .loadConfig("test", TestConfig::new)
-                .getBooleanConfig());
+                .booleanConfig.getValue());
 
     }
 }
