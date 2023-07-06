@@ -2,6 +2,7 @@ package com.unrealdinnerbone.config.config;
 
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
+import com.unrealdinnerbone.config.exception.ConfigParseException;
 import com.unrealdinnerbone.unreallib.Namespace;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,11 +25,17 @@ public class EnumConfig<T extends Enum<T>> extends ConfigValue<T> {
     }
 
     @Override
-    public @NotNull T fromObject(Object o) {
-        if(idMap.containsKey(o.toString().toLowerCase())) {
-            return idMap.get(o.toString().toLowerCase());
+    public <B> @NotNull T from(Class<B> clazz, B value) throws ConfigParseException {
+        if(clazz.equals(type)) {
+            return Enum.valueOf(type, value.toString());
+        }else if(value instanceof String s) {
+            if(idMap.containsKey(s.toLowerCase())) {
+                return idMap.get(s.toLowerCase());
+            }else {
+                throw new ConfigParseException("Cannot parse string " + s + " to enum " + type.getSimpleName());
+            }
         }else {
-            throw new IllegalArgumentException("Cant find enum with name " + o);
+            throw new ConfigParseException("Cannot parse " + clazz.getName() + " to enum " + type.getSimpleName());
         }
     }
 

@@ -2,6 +2,7 @@ package com.unrealdinnerbone.config.config;
 
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
+import com.unrealdinnerbone.config.exception.ConfigParseException;
 import com.unrealdinnerbone.unreallib.Namespace;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,13 +18,18 @@ public class BooleanConfig extends ConfigValue<Boolean> {
     }
 
     @Override
-    public @NotNull Boolean fromObject(Object o) {
-        if (o instanceof Boolean booleanValue) {
-            return booleanValue;
-        }else if (o instanceof String s && (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false"))) {
-            return Boolean.parseBoolean(s);
+    public @NotNull <B> Boolean from(Class<B> clazz, B value) throws ConfigParseException {
+        if(value instanceof Boolean b) {
+            return b;
+        }else if(value instanceof String s) {
+            if(s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false")) {
+                return Boolean.parseBoolean(s);
+            }else {
+                throw new ConfigParseException("Cannot parse string " + s + " to a boolean");
+            }
+        }else {
+            throw new ConfigParseException("Cannot parse " + clazz.getName() + " to a boolean");
         }
-        throw new IllegalArgumentException(o + " is not a valid boolean value");
     }
 
     @Override

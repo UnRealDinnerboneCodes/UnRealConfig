@@ -1,15 +1,15 @@
 package com.unrealdinnerbone.config.impl.provider;
 
+import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
-import com.unrealdinnerbone.unreallib.Namespace;
+import com.unrealdinnerbone.config.exception.ConfigNotFoundException;
+import com.unrealdinnerbone.config.exception.ConfigParseException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class ArgsProvider implements IProvider {
     private final Map<String, String> args = new HashMap<>();
-
 
     public ArgsProvider(String[] args) {
         for (String arg : args) {
@@ -23,15 +23,12 @@ public class ArgsProvider implements IProvider {
             }
         }
     }
-
     @Override
-    public Optional<Object> get(Namespace id) {
-        if(args.containsKey(id.toString("_"))) {
-            return Optional.of(args.get(id.toString("_")));
-        }else {
-            return Optional.empty();
+    public <T> T get(ConfigValue<T> value) throws ConfigParseException, ConfigNotFoundException {
+        if (args.containsKey(value.getId().toString("_"))) {
+            return value.from(String.class, args.get(value.getId().toString("_")));
+        } else {
+            throw new ConfigNotFoundException("Could not find config value: " + value.getId().toString("_"));
         }
     }
-
-
 }
