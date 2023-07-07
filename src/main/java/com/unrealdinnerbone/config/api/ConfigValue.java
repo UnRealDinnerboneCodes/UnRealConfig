@@ -18,7 +18,7 @@ public abstract class ConfigValue<T> {
     protected final IProvider provider;
 
     private String errorMessage = null;
-    private final CachedConfigValue<T> activeValue;
+    protected final CachedConfigValue<T> activeValue;
 
     public ConfigValue(Namespace id, IProvider provider, @Nullable T defaultValue) {
         this.id = id;
