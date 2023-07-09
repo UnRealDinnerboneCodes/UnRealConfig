@@ -9,7 +9,7 @@ apply from: 'https://raw.githubusercontent.com/UnRealDinnerbone/GradleHelpers/he
 version = parent.getVersion()
 
 sourceSets.main.java.srcDirs = [projectDir.parentFile.parentFile.absolutePath + "\\src\\main\\java"]
-sourceSets.test.java.srcDirs = [projectDir.parentFile.parentFile.absolutePath + "\\test\\main\\java"]
+sourceSets.test.java.srcDirs = [projectDir.parentFile.parentFile.absolutePath + "\\src\\test\\java"]
 
 dependencies {
     api 'com.unrealdinnerbone:UnRealLib-core:7.0.0+build.157'

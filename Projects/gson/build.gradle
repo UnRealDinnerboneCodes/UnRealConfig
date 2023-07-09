@@ -13,7 +13,7 @@ sourceSets.test.java.srcDirs = [projectDir.parentFile.parentFile.absolutePath + 
 
 dependencies {
     api("com.unrealdinnerbone:UnRealLib:7.0.0+build.157")
-    api("com.unrealdinnerbone:UnRealConfig:${parent.getVersion()}")
+    api("com.unrealdinnerbone:UnRealConfig-core:${parent.getVersion()}")
     testImplementation 'com.github.marschall:memoryfilesystem:2.6.1'
 
 }

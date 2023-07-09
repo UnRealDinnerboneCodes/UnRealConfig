@@ -10,7 +10,7 @@ sourceSets.main.java.srcDirs = []
 sourceSets.test.java.srcDirs = []
 
 dependencies {
-    api "com.unrealdinnerbone:UnRealConfig-core:${getVersion()}"
+    api "com.unrealdinnerbone:UnRealConfig-gson:${getVersion()}"
 }
 
 compileJava {
