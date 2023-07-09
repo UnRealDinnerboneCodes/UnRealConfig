@@ -6,8 +6,11 @@ plugins {
 
 apply from: 'https://raw.githubusercontent.com/UnRealDinnerbone/GradleHelpers/helpers/base.gradle'
 
+sourceSets.main.java.srcDirs = []
+sourceSets.test.java.srcDirs = []
+
 dependencies {
-    api 'com.unrealdinnerbone:UnRealLib-core:7.0.0+build.157'
+    api "com.unrealdinnerbone:UnRealConfig-core:${getVersion()}"
 }
 
 compileJava {
@@ -19,6 +22,8 @@ allprojects {
     configurations.configureEach {
         resolutionStrategy.dependencySubstitution {
             substitute module("com.unrealdinnerbone:UnRealConfig-gson") using project(":UnRealConfig-gson") because "We are in Dev"
+            substitute module("com.unrealdinnerbone:UnRealConfig-core") using project(":UnRealConfig-core") because "We are in Dev"
+
         }
     }
 }
