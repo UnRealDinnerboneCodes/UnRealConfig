@@ -16,8 +16,6 @@ public abstract class ConfigValue<T> {
     @Nullable
     private final T defaultValue;
     protected final IProvider provider;
-
-    private String errorMessage = null;
     protected final CachedConfigValue<T> activeValue;
 
     public ConfigValue(Namespace id, IProvider provider, @Nullable T defaultValue) {
@@ -25,16 +23,16 @@ public abstract class ConfigValue<T> {
         this.provider = provider;
         this.defaultValue = defaultValue;
         this.activeValue = new CachedConfigValue<>(() -> provider.get(this));
-        provider.setDefault(id, getClassType(), defaultValue);
+        provider.onConfigCreated(this);
     }
 
-    @Nullable
-    public String getErrorMessage() {
-        return errorMessage;
-    }
 
     public <B> void set(Class<B> clazz, B value) throws ConfigParseException {
-        set(from(clazz, value));
+        if(clazz.equals(getClassType())) {
+            set((T) value);
+        }else {
+            set(from(clazz, value));
+        }
     }
 
     @NotNull
@@ -73,7 +71,7 @@ public abstract class ConfigValue<T> {
         return defaultValue;
     }
 
-    public boolean set(T value) {
+    public boolean set(T value) throws ConfigParseException {
         activeValue.invalidate();
         return provider.save(id, getClassType(), value);
     }

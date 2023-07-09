@@ -29,6 +29,11 @@ public record ConfigCreator(String id, IProvider provider, Consumer<ConfigValue<
         });
     }
 
+    public <E> ListConfig<E> createList(String key, E[] defaultValue, Class<E[]> clazz) {
+        return create(key, defaultValue, (Namespace namespace, IProvider provider, E[] defaultValue1) -> {
+            return new ListConfig<>(namespace, provider, defaultValue1, clazz);
+        });
+    }
     public FloatConfig createFloat(String key, float defaultValue) {
         return create(key, defaultValue, FloatConfig::new);
     }

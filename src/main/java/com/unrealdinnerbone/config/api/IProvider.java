@@ -17,10 +17,15 @@ public interface IProvider {
     @Nullable
     <T> T get(ConfigValue<T> value) throws ConfigParseException, ConfigNotFoundException;
 
-    default <T> boolean save(Namespace id, Class<T> tClass, T value)  {
+    default <T> boolean save(Namespace id, Class<T> tClass, T value) throws ConfigParseException {
         return false;
     }
 
-    default <T> void setDefault(Namespace id, Class<T> tClass, T value) {};
+    default <T> void onConfigCreated(ConfigValue<T> configValue) {
+        setDefault(configValue.getId(), configValue.getClassType(), configValue.getDefaultValue());
+    }
+
+    @Deprecated(forRemoval = true)
+    default <T> void setDefault(Namespace idnamespace, Class<T> clazz, T value) {}
 
 }
