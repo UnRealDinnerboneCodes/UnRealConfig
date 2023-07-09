@@ -22,14 +22,18 @@ public class GsonProvider implements IProvider {
     private static final Logger LOGGER = LogHelper.getLogger();
     private final JsonObject jsonObject;
     private final Gson gson;
-    public GsonProvider(Path path, GsonParser gsonParser) throws ConfigParseException, IOException {
-        String jsonString = Files.readString(path);
-        JsonObject jsonObject = gsonParser.parse(JsonObject.class, jsonString);
-        if(jsonObject == null) {
-            throw new ConfigParseException("Could not parse json");
-        }else {
-            this.jsonObject = jsonObject;
-            this.gson = gsonParser.getGson();
+    public GsonProvider(Path path, GsonParser gsonParser) throws ConfigParseException {
+        try {
+            String jsonString = Files.readString(path);
+            JsonObject jsonObject = gsonParser.parse(JsonObject.class, jsonString);
+            if(jsonObject == null) {
+                throw new ConfigParseException("Could not parse json");
+            }else {
+                this.jsonObject = jsonObject;
+                this.gson = gsonParser.getGson();
+            }
+        } catch (IOException e) {
+            throw new ConfigParseException("Could not read file: " + e.getMessage());
         }
     }
     @Override
