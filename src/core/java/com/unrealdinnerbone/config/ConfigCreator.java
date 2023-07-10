@@ -12,6 +12,7 @@ public record ConfigCreator(String id, IProvider provider, Consumer<ConfigValue<
     public <D, R extends ConfigValue<D>> R create(String key, D defaultValue, ConfigCreatorFunction<D, R> function) {
         R apply = function.apply(Namespace.of(id, key), provider, defaultValue);
         creationCallback.accept(apply);
+        provider.onConfigCreated(apply);
         return apply;
     }
 

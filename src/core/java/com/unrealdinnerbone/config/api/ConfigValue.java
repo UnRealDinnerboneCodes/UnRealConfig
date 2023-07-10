@@ -23,7 +23,6 @@ public abstract class ConfigValue<T> {
         this.provider = provider;
         this.defaultValue = defaultValue;
         this.activeValue = new CachedConfigValue<>(() -> provider.get(this));
-        provider.onConfigCreated(this);
     }
 
 

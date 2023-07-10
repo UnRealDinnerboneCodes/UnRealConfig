@@ -70,7 +70,9 @@ public class GsonProvider implements IProvider {
     @Override
     public <T> void onConfigCreated(ConfigValue<T> configValue) {
         try {
-            save(configValue.getId(), configValue.getClassType(), configValue.getDefaultValue());
+            if (configValue.get().isEmpty()) {
+                save(configValue.getId(), configValue.getClassType(), configValue.getDefaultValue());
+            }
         }catch (ConfigParseException e) {
             LOGGER.error("Could not save config " + configValue.getId().key() + " as it is not a JsonObject");
         }
