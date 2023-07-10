@@ -20,24 +20,29 @@ import java.nio.file.Path;
 public class GsonProvider implements IProvider {
 
     private static final Logger LOGGER = LogHelper.getLogger();
-    private final JsonObject jsonObject;
+    private JsonObject jsonObject;
     private final Gson gson;
-    public GsonProvider(Path path, GsonParser gsonParser) throws ConfigParseException {
-        try {
-            String jsonString = Files.readString(path);
-            JsonObject jsonObject = gsonParser.parse(JsonObject.class, jsonString);
-            if(jsonObject == null) {
-                throw new ConfigParseException("Could not parse json");
-            }else {
-                this.jsonObject = jsonObject;
-                this.gson = gsonParser.getGson();
-            }
-        } catch (IOException e) {
-            throw new ConfigParseException("Could not read file: " + e.getMessage());
-        }
+    private final Path path;
+
+    public GsonProvider(Path path, GsonParser gsonParser)  {
+        this.path = path;
+        this.gson = gsonParser.getGsonFancy();
     }
     @Override
     public <T> @Nullable T get(ConfigValue<T> value) throws ConfigParseException, ConfigNotFoundException {
+        if(jsonObject == null) {
+            try {
+                String jsonString = Files.readString(path);
+                JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
+                if(jsonObject == null) {
+                    throw new ConfigParseException("Could not parse json");
+                }else {
+                    this.jsonObject = jsonObject;
+                }
+            } catch (IOException e) {
+                throw new ConfigParseException("Could not read file: " + e.getMessage());
+            }
+        }
         if(jsonObject.has(value.getId().key())) {
             JsonElement jsonElement = jsonObject.get(value.getId().key());
             if(jsonElement instanceof JsonObject jObject) {
@@ -61,6 +66,11 @@ public class GsonProvider implements IProvider {
         JsonElement jsonElement = jsonObject.get(id.key());
         if(jsonElement instanceof JsonObject jObject) {
             jObject.add(id.value(), gson.toJsonTree(value));
+            try {
+                Files.writeString(path, gson.toJson(jsonObject));
+            } catch (IOException e) {
+                throw new ConfigParseException("Could not save config " + id.key());
+            }
             return true;
         }else {
             throw new ConfigParseException("Could not save config " + id.key() + " as it is not a JsonObject");
