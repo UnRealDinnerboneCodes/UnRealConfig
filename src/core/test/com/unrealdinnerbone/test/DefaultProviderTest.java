@@ -2,6 +2,7 @@ package com.unrealdinnerbone.test;
 
 import com.unrealdinnerbone.config.ConfigManager;
 import com.unrealdinnerbone.config.exception.ConfigException;
+import com.unrealdinnerbone.config.impl.provider.MemoryConfigProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ public class DefaultProviderTest {
 
     @Test
     public void test() {
-        ConfigManager configManager = new ConfigManager(new DefaultConfigProvider());
+        ConfigManager configManager = new ConfigManager(new MemoryConfigProvider());
         TestConfig test = configManager.loadConfig("test", TestConfig::new);
         try {
             Assertions.assertNull(test.stringConfig.getExceptionally());

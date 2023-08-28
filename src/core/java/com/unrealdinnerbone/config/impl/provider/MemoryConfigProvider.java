@@ -1,4 +1,4 @@
-package com.unrealdinnerbone.test;
+package com.unrealdinnerbone.config.impl.provider;
 
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DefaultConfigProvider implements IProvider {
+public class MemoryConfigProvider implements IProvider {
 
     private final Map<Namespace, Object> configValueMap = new HashMap<>();
 
