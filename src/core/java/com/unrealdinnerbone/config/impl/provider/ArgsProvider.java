@@ -1,9 +1,11 @@
 package com.unrealdinnerbone.config.impl.provider;
 
-import com.unrealdinnerbone.config.api.ConfigValue;
+import com.unrealdinnerbone.config.api.ClassMapper;
 import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.exception.ConfigNotFoundException;
 import com.unrealdinnerbone.config.exception.ConfigParseException;
+import com.unrealdinnerbone.unreallib.Namespace;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,12 +25,14 @@ public class ArgsProvider implements IProvider {
             }
         }
     }
+
     @Override
-    public <T> T get(ConfigValue<T> value) throws ConfigParseException, ConfigNotFoundException {
-        if (args.containsKey(value.getId().toString("_"))) {
-            return value.from(String.class, args.get(value.getId().toString("_")));
+    public <T> @Nullable T get(Namespace id, Class<T> tClass, ClassMapper<T> mapper) throws ConfigParseException, ConfigNotFoundException {
+        String configId = id.toString("_");
+        if (args.containsKey(configId)) {
+            return mapper.map(String.class, args.get(configId));
         } else {
-            throw new ConfigNotFoundException("Could not find config value: " + value.getId().toString("_"));
+            throw new ConfigNotFoundException("Could not find config value: " + configId);
         }
     }
 }

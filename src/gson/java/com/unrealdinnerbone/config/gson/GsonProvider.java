@@ -3,6 +3,7 @@ package com.unrealdinnerbone.config.gson;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.unrealdinnerbone.config.api.ClassMapper;
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.exception.ConfigNotFoundException;
@@ -30,7 +31,7 @@ public class GsonProvider implements IProvider {
         this.gson = gsonParser.getGsonFancy();
     }
     @Override
-    public <T> @Nullable T get(ConfigValue<T> value) throws ConfigParseException, ConfigNotFoundException {
+    public <T> @Nullable T get(Namespace id, Class<T> tClass, ClassMapper<T> mapper) throws ConfigParseException, ConfigNotFoundException {
         if(jsonObject == null) {
             try {
                 String jsonString = Files.readString(path);
@@ -44,19 +45,19 @@ public class GsonProvider implements IProvider {
                 throw new ConfigParseException("Could not read file: " + e.getMessage());
             }
         }
-        if(jsonObject.has(value.getId().key())) {
-            JsonElement jsonElement = jsonObject.get(value.getId().key());
+        if(jsonObject.has(id.key())) {
+            JsonElement jsonElement = jsonObject.get(id.key());
             if(jsonElement instanceof JsonObject jObject) {
-                if(jObject.has(value.getId().value())) {
-                    return gson.fromJson(jObject.get(value.getId().value()), value.getClassType());
+                if(jObject.has(id.value())) {
+                    return gson.fromJson(jObject.get(id.value()), tClass);
                 }else {
-                    throw new ConfigNotFoundException("Could not find object in json with id " + value.getId().value());
+                    throw new ConfigNotFoundException("Could not find object in json with id " + id.value());
                 }
             }else {
-                throw new ConfigParseException(value.getId().key() + " is not a JsonObject");
+                throw new ConfigParseException(id.key() + " is not a JsonObject");
             }
         }else {
-            throw new ConfigNotFoundException("Could not find object in json with id" + value.getId().key());
+            throw new ConfigNotFoundException("Could not find object in json with id" + id.key());
         }
     }
     @Override

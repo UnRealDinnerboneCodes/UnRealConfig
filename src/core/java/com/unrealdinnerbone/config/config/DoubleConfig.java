@@ -5,7 +5,6 @@ import com.unrealdinnerbone.unreallib.Namespace;
 
 public class DoubleConfig extends NumberConfig<Double> {
 
-
     public DoubleConfig(Namespace id, IProvider provider, Double defaultValue) {
         super(id, provider, defaultValue);
     }

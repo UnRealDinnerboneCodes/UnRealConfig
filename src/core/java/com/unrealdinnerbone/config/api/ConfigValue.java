@@ -22,7 +22,7 @@ public abstract class ConfigValue<T> {
         this.id = id;
         this.provider = provider;
         this.defaultValue = defaultValue;
-        this.activeValue = new CachedConfigValue<>(() -> provider.get(this));
+        this.activeValue = new CachedConfigValue<>(() -> provider.get(id, getClassType(), this::from));
     }
 
 
@@ -49,6 +49,7 @@ public abstract class ConfigValue<T> {
         return activeValue.get();
     }
 
+    @Nullable
     public T getOrDefault() {
         return get().orElse(defaultValue);
     }

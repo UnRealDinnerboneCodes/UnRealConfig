@@ -15,7 +15,7 @@ public interface IProvider {
      * @throws ConfigNotFoundException if the config is not found
      */
     @Nullable
-    <T> T get(ConfigValue<T> value) throws ConfigParseException, ConfigNotFoundException;
+    <T> T get(Namespace id, Class<T> tClass, ClassMapper<T> mapper)  throws ConfigParseException, ConfigNotFoundException;
 
     default <T> boolean save(Namespace id, Class<T> tClass, T value) throws ConfigParseException {
         return false;
