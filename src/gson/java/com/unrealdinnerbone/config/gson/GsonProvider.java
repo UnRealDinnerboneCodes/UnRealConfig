@@ -10,6 +10,7 @@ import com.unrealdinnerbone.config.exception.ConfigParseException;
 import com.unrealdinnerbone.unreallib.LogHelper;
 import com.unrealdinnerbone.unreallib.Namespace;
 import com.unrealdinnerbone.unreallib.json.gson.GsonParser;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -59,7 +60,7 @@ public class GsonProvider implements IProvider {
         }
     }
     @Override
-    public <T> boolean save(Namespace id, Class<T> tClass, T value) throws ConfigParseException {
+    public <T> boolean save(@NotNull Namespace id, Class<T> tClass, T value) throws ConfigParseException {
         if(!jsonObject.has(id.key())) {
             jsonObject.add(id.key(), new JsonObject());
         }

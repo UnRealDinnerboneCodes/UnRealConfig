@@ -19,15 +19,13 @@ public class BooleanConfig extends ConfigValue<Boolean> {
 
     @Override
     public @NotNull <B> Boolean from(Class<B> clazz, B value) throws ConfigParseException {
-        if(value instanceof Boolean b) {
-            return b;
-        }else if(value instanceof String s) {
-            if(s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false")) {
+        if (value instanceof String s) {
+            if (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false")) {
                 return Boolean.parseBoolean(s);
-            }else {
+            } else {
                 throw new ConfigParseException("Cannot parse string " + s + " to a boolean");
             }
-        }else {
+        } else {
             throw new ConfigParseException("Cannot parse " + clazz.getName() + " to a boolean");
         }
     }

@@ -1,4 +1,4 @@
-package com.unrealdinnerbone.config.impl.provider;
+package com.unrealdinnerbone.test;
 
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;

@@ -27,11 +27,7 @@ public abstract class ConfigValue<T> {
 
 
     public <B> void set(Class<B> clazz, B value) throws ConfigParseException {
-        if(clazz.equals(getClassType())) {
-            set((T) value);
-        }else {
-            set(from(clazz, value));
-        }
+        set(clazz.isInstance(getClassType()) ? getClassType().cast(value) : from(clazz, value));
     }
 
     @NotNull
@@ -41,24 +37,20 @@ public abstract class ConfigValue<T> {
         return id;
     }
 
-    public T getExceptionally() throws ConfigException {
-        return activeValue.get();
-    }
-
-    public T getOrDefault() {
-        try {
-            return getExceptionally();
-        } catch (ConfigException e) {
-            return defaultValue;
-        }
-    }
-
     public Optional<T> get() {
         try {
             return Optional.of(getExceptionally());
         } catch (ConfigException e) {
             return Optional.empty();
         }
+    }
+
+    public T getExceptionally() throws ConfigException {
+        return activeValue.get();
+    }
+
+    public T getOrDefault() {
+        return get().orElse(defaultValue);
     }
 
     public List<String> getExamples() {
@@ -70,6 +62,9 @@ public abstract class ConfigValue<T> {
         return defaultValue;
     }
 
+    public void invalidate() {
+        activeValue.invalidate();
+    }
     public boolean set(T value) throws ConfigParseException {
         activeValue.invalidate();
         return provider.save(id, getClassType(), value);

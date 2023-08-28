@@ -21,11 +21,6 @@ public interface IProvider {
         return false;
     }
 
-    default <T> void onConfigCreated(ConfigValue<T> configValue) {
-        setDefault(configValue.getId(), configValue.getClassType(), configValue.getDefaultValue());
-    }
-
-    @Deprecated(forRemoval = true)
-    default <T> void setDefault(Namespace idnamespace, Class<T> clazz, T value) {}
+    default <T> void onConfigCreated(ConfigValue<T> configValue) {}
 
 }
