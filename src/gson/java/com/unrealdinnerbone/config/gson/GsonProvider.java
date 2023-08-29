@@ -30,6 +30,12 @@ public class GsonProvider implements IProvider {
         this.path = path;
         this.gson = gsonParser.getGsonFancy();
     }
+
+    @Override
+    public void invalidateCache() {
+        jsonObject = null;
+    }
+
     @Override
     public <T> @Nullable T get(Namespace id, Class<T> tClass, ClassMapper<T> mapper) throws ConfigParseException, ConfigNotFoundException {
         if(jsonObject == null) {

@@ -23,4 +23,6 @@ public interface IProvider {
 
     default <T> void onConfigCreated(ConfigValue<T> configValue) {}
 
+    default void invalidateCache() {}
+
 }

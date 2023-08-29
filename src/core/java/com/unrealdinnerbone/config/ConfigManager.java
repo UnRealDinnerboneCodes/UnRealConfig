@@ -23,6 +23,19 @@ public class ConfigManager {
         return configFunction.apply(new ConfigCreator(id, provider, configs::add));
     }
 
+    public void invalidateProvider() {
+        provider.invalidateCache();
+    }
+
+    public void invalidateConfigs() {
+        configs.forEach(ConfigValue::invalidate);
+    }
+
+    public void invalidate() {
+        invalidateProvider();
+        invalidateConfigs();
+    }
+
     public Set<ConfigValue<?>> getConfigs() {
         return configs;
     }
