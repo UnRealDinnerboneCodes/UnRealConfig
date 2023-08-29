@@ -27,16 +27,20 @@ public abstract class ConfigValue<T> implements ClassMapper<T> {
 
 
     public <B> void set(Class<B> clazz, B value) throws ConfigParseException {
-        set(clazz.isInstance(getClassType()) ? getClassType().cast(value) : map(clazz, value));
+        set(map(clazz, value));
     }
 
     @Override
-    public <C> T map(Class<C> t, C value) throws ConfigParseException {
-        return from(t, value);
+    public final <C> T map(Class<C> clazz, C value) throws ConfigParseException {
+        if (clazz.isInstance(getClassType()) || getClassType() == clazz) {
+            return getClassType().cast(value);
+        }else {
+            return from(clazz, value);
+        }
     }
 
     @NotNull
-    public abstract <B> T from(Class<B> clazz, B value) throws ConfigParseException;
+    protected abstract <B> T from(Class<B> clazz, B value) throws ConfigParseException;
 
     public Namespace getId() {
         return id;
@@ -71,9 +75,15 @@ public abstract class ConfigValue<T> implements ClassMapper<T> {
     public void invalidate() {
         activeValue.invalidate();
     }
-    public boolean set(T value) throws ConfigParseException {
-        activeValue.invalidate();
-        return provider.save(id, getClassType(), value);
+    public void set(T value) throws ConfigParseException {
+        activeValue.set(value);
+    }
+
+    public boolean save() throws ConfigException {
+        if(activeValue.isPresent()) {
+            return provider.save(id, getClassType(), activeValue.get());
+        }
+        return false;
     }
 
     public abstract Class<T> getClassType();

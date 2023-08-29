@@ -16,6 +16,8 @@ public class TestConfig {
     public final IntegerConfig integerConfig;
     public final StringConfig stringConfig;
 
+    public final ListConfig<String> stringListConfig;
+
 
     public TestConfig(ConfigCreator creator) {
         this.stringConfig = creator.createString("string", null);
@@ -24,6 +26,7 @@ public class TestConfig {
         this.floatConfig = creator.createFloat("float", 0.0F);
         this.integerConfig = creator.createInteger("integer", 0);
         this.enumConfig = creator.createEnum("enum", TestEnum.GOOD, TestEnum.class);
+        this.stringListConfig = creator.createList("string_list", new String[]{"one", "two"}, String[].class);
     }
 
 }

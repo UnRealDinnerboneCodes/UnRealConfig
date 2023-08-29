@@ -14,7 +14,7 @@ public abstract class NumberConfig<T extends Number> extends ConfigValue<T> {
     }
 
     @Override
-    public @NotNull <B> T from(Class<B> clazz, B value) throws ConfigParseException {
+    protected @NotNull <B> T from(Class<B> clazz, B value) throws ConfigParseException {
         if(value instanceof Number number) {
             return numberValue(number);
         }

@@ -20,6 +20,14 @@ public class CachedConfigValue<T> implements ExceptionSuppler<T, ConfigException
         return currentValue;
     }
 
+    public boolean isPresent() {
+        return currentValue != null;
+    }
+
+    public void set(T value) {
+        currentValue = value;
+    }
+
     public void invalidate() {
         currentValue = null;
     }

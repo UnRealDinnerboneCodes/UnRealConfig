@@ -7,6 +7,7 @@ import com.unrealdinnerbone.unreallib.Namespace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,18 +48,23 @@ public class ListConfig<T> extends ConfigValue<T[]> {
             T[] a = optionalTS.get();
             List<T> list = new ArrayList<>(Arrays.asList(a));
             list.remove(value);
-            T[] newArray = list.toArray(a);
+            T[] array = (T[]) Array.newInstance(clazz.getComponentType(), list.size());
+            T[] newArray = list.toArray(array);
             set(newArray);
         }
     }
 
     @Override
-    public <B> @NotNull T @NotNull [] from(Class<B> clazz, B value) throws ConfigParseException {
-        if(clazz.isArray() && clazz.getComponentType().isAssignableFrom(this.clazz.getComponentType())) {
-            return (T[]) value;
+    protected <B> @NotNull T @NotNull [] from(Class<B> clazz, B value) throws ConfigParseException {
+        if(clazz.isAssignableFrom(this.clazz.getComponentType())) {
+            return this.clazz.cast(toArray(value));
         } else {
             throw new ConfigParseException("Could not parse " + clazz.getName() + " to " + this.clazz.getName());
         }
+    }
+
+    private <B> B[] toArray(B... value) {
+        return value;
     }
 
     @Override

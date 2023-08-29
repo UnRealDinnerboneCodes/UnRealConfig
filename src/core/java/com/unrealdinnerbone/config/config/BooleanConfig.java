@@ -18,7 +18,7 @@ public class BooleanConfig extends ConfigValue<Boolean> {
     }
 
     @Override
-    public @NotNull <B> Boolean from(Class<B> clazz, B value) throws ConfigParseException {
+    protected @NotNull <B> Boolean from(Class<B> clazz, B value) throws ConfigParseException {
         if (value instanceof String s) {
             if (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false")) {
                 return Boolean.parseBoolean(s);

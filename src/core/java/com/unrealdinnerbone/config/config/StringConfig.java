@@ -13,7 +13,7 @@ public class StringConfig extends ConfigValue<String> {
     }
 
     @Override
-    public @NotNull <B> String from(Class<B> clazz, B value) throws ConfigParseException {
+    protected @NotNull <B> String from(Class<B> clazz, B value) throws ConfigParseException {
         return value == null ? "null" : value.toString();
     }
 

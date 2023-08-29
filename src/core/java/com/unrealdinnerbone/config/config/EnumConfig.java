@@ -25,7 +25,7 @@ public class EnumConfig<T extends Enum<T>> extends ConfigValue<T> {
     }
 
     @Override
-    public <B> @NotNull T from(Class<B> clazz, B value) throws ConfigParseException {
+    protected <B> @NotNull T from(Class<B> clazz, B value) throws ConfigParseException {
         if(clazz.equals(type)) {
             return Enum.valueOf(type, value.toString());
         }else if(value instanceof String s) {
