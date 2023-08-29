@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class ConfigValue<T> {
+public abstract class ConfigValue<T> implements ClassMapper<T> {
     private final Namespace id;
     @Nullable
     private final T defaultValue;
@@ -22,12 +22,17 @@ public abstract class ConfigValue<T> {
         this.id = id;
         this.provider = provider;
         this.defaultValue = defaultValue;
-        this.activeValue = new CachedConfigValue<>(() -> provider.get(id, getClassType(), this::from));
+        this.activeValue = new CachedConfigValue<>(() -> provider.get(id, getClassType(), this));
     }
 
 
     public <B> void set(Class<B> clazz, B value) throws ConfigParseException {
-        set(clazz.isInstance(getClassType()) ? getClassType().cast(value) : from(clazz, value));
+        set(clazz.isInstance(getClassType()) ? getClassType().cast(value) : map(clazz, value));
+    }
+
+    @Override
+    public <C> T map(Class<C> t, C value) throws ConfigParseException {
+        return from(t, value);
     }
 
     @NotNull
