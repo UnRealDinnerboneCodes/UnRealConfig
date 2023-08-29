@@ -59,6 +59,7 @@ public class GsonConfigTests {
         Assertions.assertTrue(Arrays.stream(testConfig1.listConfig.getExceptionally()).toList().containsAll(List.of("Hello World", "Hello World Again")));
 
         testConfig1.booleanConfig.set(false);
+        testConfig1.booleanConfig.save();
         TestConfig testConfig2 = configManager.loadConfig("test", TestConfig::new);
         Assertions.assertEquals(false, testConfig2.booleanConfig.getExceptionally());
     }
