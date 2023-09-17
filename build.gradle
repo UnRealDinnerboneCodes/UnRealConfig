@@ -11,7 +11,7 @@ sourceSets.test.java.srcDirs = []
 
 dependencies {
 
-    api "com.unrealdinnerbone:UnRealConfig2-gson:${getVersion()}"
+    api "com.unrealdinnerbone:UnRealConfig-gson:${getVersion()}"
 }
 
 compileJava {
@@ -22,8 +22,8 @@ compileJava {
 allprojects {
     configurations.configureEach {
         resolutionStrategy.dependencySubstitution {
-            substitute module("com.unrealdinnerbone:UnRealConfig2-gson") using project(":UnRealConfig-gson") because "We are in Dev"
-            substitute module("com.unrealdinnerbone:UnRealConfig2-core") using project(":UnRealConfig-core") because "We are in Dev"
+            substitute module("com.unrealdinnerbone:UnRealConfig-gson") using project(":UnRealConfig-gson") because "We are in Dev"
+            substitute module("com.unrealdinnerbone:UnRealConfig-core") using project(":UnRealConfig-core") because "We are in Dev"
 
         }
     }
