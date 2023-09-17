@@ -4,7 +4,6 @@ import com.unrealdinnerbone.config.api.ConfigID;
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.impl.provider.EnvProvider;
-import com.unrealdinnerbone.unreallib.Namespace;
 
 import java.util.*;
 import java.util.function.Function;

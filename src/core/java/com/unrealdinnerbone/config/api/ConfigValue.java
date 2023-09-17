@@ -3,7 +3,6 @@ package com.unrealdinnerbone.config.api;
 import com.unrealdinnerbone.config.exception.CachedConfigValue;
 import com.unrealdinnerbone.config.exception.ConfigException;
 import com.unrealdinnerbone.config.exception.ConfigParseException;
-import com.unrealdinnerbone.unreallib.Namespace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

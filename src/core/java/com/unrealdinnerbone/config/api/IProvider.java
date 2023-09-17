@@ -2,7 +2,6 @@ package com.unrealdinnerbone.config.api;
 
 import com.unrealdinnerbone.config.exception.ConfigNotFoundException;
 import com.unrealdinnerbone.config.exception.ConfigParseException;
-import com.unrealdinnerbone.unreallib.Namespace;
 import org.jetbrains.annotations.Nullable;
 
 public interface IProvider {
