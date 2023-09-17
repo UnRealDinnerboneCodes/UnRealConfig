@@ -39,6 +39,9 @@ public class GsonProvider implements IProvider {
     public <T> @Nullable T get(ConfigID id, Class<T> tClass, ClassMapper<T> mapper) throws ConfigParseException, ConfigNotFoundException {
         if(jsonObject == null) {
             try {
+                if(!Files.exists(path)) {
+                    Files.writeString(path, gson.toJson(new JsonObject()));
+                }
                 String jsonString = Files.readString(path);
                 JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
                 if(jsonObject == null) {

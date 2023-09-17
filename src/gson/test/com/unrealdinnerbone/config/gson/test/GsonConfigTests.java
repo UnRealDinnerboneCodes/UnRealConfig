@@ -27,6 +27,22 @@ public class GsonConfigTests {
     }
 
     @Test
+    public void testNewFile() throws IOException, ConfigException {
+        Path path = fileSystem.getPath("testone.json");
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        ConfigManager configManager = new ConfigManager(new GsonProvider(path, gson));
+        TestConfig testConfig1 = configManager.loadConfig("test", TestConfig::new);
+        Assertions.assertEquals(testConfig1.booleanConfig.getDefaultValue(), testConfig1.booleanConfig.getExceptionally());
+        Assertions.assertEquals(testConfig1.doubleConfig.getDefaultValue(), testConfig1.doubleConfig.getExceptionally());
+        Assertions.assertEquals(testConfig1.floatConfig.getDefaultValue(), testConfig1.floatConfig.getExceptionally());
+        Assertions.assertEquals(testConfig1.integerConfig.getDefaultValue(), testConfig1.integerConfig.getExceptionally());
+        Assertions.assertEquals(testConfig1.enumConfig.getDefaultValue(), testConfig1.enumConfig.getExceptionally());
+        Assertions.assertEquals(testConfig1.stringConfig.getDefaultValue(), testConfig1.stringConfig.getExceptionally());
+        Assertions.assertTrue(Arrays.stream(testConfig1.listConfig.getExceptionally()).toList().containsAll(Arrays.stream(testConfig1.listConfig.getExceptionally()).toList()));
+
+    }
+
+    @Test
     public void testBasicConfig() throws ConfigException, IOException {
         Path path = fileSystem.getPath("test.json");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
