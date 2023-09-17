@@ -1,5 +1,5 @@
 module com.unrealdinnerbone.unrealconfig {
-    requires org.jetbrains.annotations;
+    requires static org.jetbrains.annotations;
     exports com.unrealdinnerbone.config;
     exports com.unrealdinnerbone.config.api;
     exports com.unrealdinnerbone.config.config;
