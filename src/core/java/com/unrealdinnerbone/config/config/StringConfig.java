@@ -1,14 +1,14 @@
 package com.unrealdinnerbone.config.config;
 
+import com.unrealdinnerbone.config.api.ConfigID;
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.exception.ConfigParseException;
-import com.unrealdinnerbone.unreallib.Namespace;
 import org.jetbrains.annotations.NotNull;
 
 public class StringConfig extends ConfigValue<String> {
 
-    public StringConfig(Namespace id, IProvider provider, String defaultValue) {
+    public StringConfig(ConfigID id, IProvider provider, String defaultValue) {
         super(id, provider, defaultValue);
     }
 

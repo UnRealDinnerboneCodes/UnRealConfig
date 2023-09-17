@@ -1,10 +1,10 @@
 package com.unrealdinnerbone.config.impl.provider;
 
 import com.unrealdinnerbone.config.api.ClassMapper;
+import com.unrealdinnerbone.config.api.ConfigID;
 import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.exception.ConfigNotFoundException;
 import com.unrealdinnerbone.config.exception.ConfigParseException;
-import com.unrealdinnerbone.unreallib.Namespace;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -27,8 +27,8 @@ public class ArgsProvider implements IProvider {
     }
 
     @Override
-    public <T> @Nullable T get(Namespace id, Class<T> tClass, ClassMapper<T> mapper) throws ConfigParseException, ConfigNotFoundException {
-        String configId = id.toString("_");
+    public <T> @Nullable T get(ConfigID id, Class<T> tClass, ClassMapper<T> mapper) throws ConfigParseException, ConfigNotFoundException {
+        String configId = id.key() + "_" + id.value();
         if (args.containsKey(configId)) {
             return mapper.map(String.class, args.get(configId));
         } else {

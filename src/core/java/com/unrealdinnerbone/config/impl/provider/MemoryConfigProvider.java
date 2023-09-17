@@ -1,11 +1,11 @@
 package com.unrealdinnerbone.config.impl.provider;
 
 import com.unrealdinnerbone.config.api.ClassMapper;
+import com.unrealdinnerbone.config.api.ConfigID;
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.exception.ConfigNotFoundException;
 import com.unrealdinnerbone.config.exception.ConfigParseException;
-import com.unrealdinnerbone.unreallib.Namespace;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -13,10 +13,10 @@ import java.util.Map;
 
 public class MemoryConfigProvider implements IProvider {
 
-    private final Map<Namespace, Object> configValueMap = new HashMap<>();
+    private final Map<ConfigID, Object> configValueMap = new HashMap<>();
 
     @Override
-    public <T> @Nullable T get(Namespace id, Class<T> tClass, ClassMapper<T> clazzMapper) throws ConfigParseException, ConfigNotFoundException {
+    public <T> @Nullable T get(ConfigID id, Class<T> tClass, ClassMapper<T> clazzMapper) throws ConfigParseException, ConfigNotFoundException {
         if(configValueMap.containsKey(id)) {
             try {
                 return ((T) configValueMap.get(id));
@@ -29,7 +29,7 @@ public class MemoryConfigProvider implements IProvider {
     }
 
     @Override
-    public <T> boolean save(Namespace id, Class<T> tClass, T value) {
+    public <T> boolean save(ConfigID id, Class<T> tClass, T value) {
         configValueMap.put(id, value);
         return true;
 

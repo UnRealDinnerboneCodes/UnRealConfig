@@ -1,11 +1,11 @@
 package com.unrealdinnerbone.config.config;
 
+import com.unrealdinnerbone.config.api.ConfigID;
 import com.unrealdinnerbone.config.api.IProvider;
-import com.unrealdinnerbone.unreallib.Namespace;
 
 public class IntegerConfig extends NumberConfig<Integer> {
 
-    public IntegerConfig(Namespace id, IProvider provider, Integer defaultValue)  {
+    public IntegerConfig(ConfigID id, IProvider provider, Integer defaultValue)  {
         super(id, provider, defaultValue);
     }
 

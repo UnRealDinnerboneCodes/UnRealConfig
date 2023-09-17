@@ -1,11 +1,11 @@
 package com.unrealdinnerbone.config.config;
 
+import com.unrealdinnerbone.config.api.ConfigID;
 import com.unrealdinnerbone.config.api.IProvider;
-import com.unrealdinnerbone.unreallib.Namespace;
 
 public class FloatConfig extends NumberConfig<Float> {
 
-    public FloatConfig(Namespace id, IProvider provider, Float defaultValue)  {
+    public FloatConfig(ConfigID id, IProvider provider, Float defaultValue)  {
         super(id, provider, defaultValue);
     }
     @Override

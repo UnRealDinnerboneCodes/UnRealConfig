@@ -1,11 +1,11 @@
 package com.unrealdinnerbone.config.config;
 
+import com.unrealdinnerbone.config.api.ConfigID;
 import com.unrealdinnerbone.config.api.IProvider;
-import com.unrealdinnerbone.unreallib.Namespace;
 
 public class DoubleConfig extends NumberConfig<Double> {
 
-    public DoubleConfig(Namespace id, IProvider provider, Double defaultValue) {
+    public DoubleConfig(ConfigID id, IProvider provider, Double defaultValue) {
         super(id, provider, defaultValue);
     }
 

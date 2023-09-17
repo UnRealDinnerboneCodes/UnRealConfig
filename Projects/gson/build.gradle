@@ -12,8 +12,8 @@ sourceSets.main.java.srcDirs = [projectDir.parentFile.parentFile.absolutePath + 
 sourceSets.test.java.srcDirs = [projectDir.parentFile.parentFile.absolutePath + "\\src\\gson\\test"]
 
 dependencies {
-    api("com.unrealdinnerbone:UnRealLib-gson:8.2.0")
-    api("com.unrealdinnerbone:UnRealConfig-core:${parent.getVersion()}")
+    implementation 'com.google.code.gson:gson:2.10.1'
+    api("com.unrealdinnerbone:UnRealConfig2-core:${parent.getVersion()}")
     testImplementation 'com.github.marschall:memoryfilesystem:2.6.1'
 
 }

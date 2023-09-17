@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class ConfigValue<T> implements ClassMapper<T> {
-    private final Namespace id;
+    private final ConfigID id;
     @Nullable
     private final T defaultValue;
     protected final IProvider provider;
     protected final CachedConfigValue<T> activeValue;
 
-    public ConfigValue(Namespace id, IProvider provider, @Nullable T defaultValue) {
+    public ConfigValue(ConfigID id, IProvider provider, @Nullable T defaultValue) {
         this.id = id;
         this.provider = provider;
         this.defaultValue = defaultValue;
@@ -42,7 +42,7 @@ public abstract class ConfigValue<T> implements ClassMapper<T> {
     @NotNull
     protected abstract <B> T from(Class<B> clazz, B value) throws ConfigParseException;
 
-    public Namespace getId() {
+    public ConfigID getId() {
         return id;
     }
 

@@ -1,5 +1,6 @@
 package com.unrealdinnerbone.config;
 
+import com.unrealdinnerbone.config.api.ConfigID;
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.impl.provider.EnvProvider;
@@ -45,9 +46,9 @@ public class ConfigManager {
     }
 
 
-    public static Optional<ConfigValue<?>> findConfig(Namespace id) {
+    public static Optional<ConfigValue<?>> findConfig(ConfigID id) {
         return getAllConfigs().stream()
-                .filter(config -> config.getId().is(id))
+                .filter(config -> config.getId().equals(id))
                 .findFirst();
     }
 

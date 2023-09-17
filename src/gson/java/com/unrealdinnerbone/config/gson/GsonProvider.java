@@ -4,16 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.unrealdinnerbone.config.api.ClassMapper;
+import com.unrealdinnerbone.config.api.ConfigID;
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.exception.ConfigNotFoundException;
 import com.unrealdinnerbone.config.exception.ConfigParseException;
-import com.unrealdinnerbone.unreallib.LogHelper;
-import com.unrealdinnerbone.unreallib.Namespace;
-import com.unrealdinnerbone.unreallib.json.gson.GsonParser;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,14 +20,14 @@ import java.nio.file.Path;
 
 public class GsonProvider implements IProvider {
 
-    private static final Logger LOGGER = LogHelper.getLogger();
+    private static final Logger LOGGER = LoggerFactory.getLogger(GsonProvider.class);
     private JsonObject jsonObject;
     private final Gson gson;
     private final Path path;
 
-    public GsonProvider(Path path, GsonParser gsonParser)  {
+    public GsonProvider(Path path, Gson gson)  {
         this.path = path;
-        this.gson = gsonParser.getGsonFancy();
+        this.gson = gson;
     }
 
     @Override
@@ -37,7 +36,7 @@ public class GsonProvider implements IProvider {
     }
 
     @Override
-    public <T> @Nullable T get(Namespace id, Class<T> tClass, ClassMapper<T> mapper) throws ConfigParseException, ConfigNotFoundException {
+    public <T> @Nullable T get(ConfigID id, Class<T> tClass, ClassMapper<T> mapper) throws ConfigParseException, ConfigNotFoundException {
         if(jsonObject == null) {
             try {
                 String jsonString = Files.readString(path);
@@ -67,7 +66,7 @@ public class GsonProvider implements IProvider {
         }
     }
     @Override
-    public <T> boolean save(@NotNull Namespace id, Class<T> tClass, T value) throws ConfigParseException {
+    public <T> boolean save(@NotNull ConfigID id, Class<T> tClass, T value) throws ConfigParseException {
         if(!jsonObject.has(id.key())) {
             jsonObject.add(id.key(), new JsonObject());
         }

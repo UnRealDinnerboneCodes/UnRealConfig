@@ -1,15 +1,15 @@
 package com.unrealdinnerbone.config.config;
 
+import com.unrealdinnerbone.config.api.ConfigID;
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.exception.ConfigParseException;
-import com.unrealdinnerbone.unreallib.Namespace;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class NumberConfig<T extends Number> extends ConfigValue<T> {
 
 
-    public NumberConfig(Namespace id, IProvider provider, T defaultValue) {
+    public NumberConfig(ConfigID id, IProvider provider, T defaultValue) {
         super(id, provider, defaultValue);
     }
 

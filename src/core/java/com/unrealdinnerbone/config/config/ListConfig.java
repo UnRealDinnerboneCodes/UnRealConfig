@@ -1,9 +1,9 @@
 package com.unrealdinnerbone.config.config;
 
+import com.unrealdinnerbone.config.api.ConfigID;
 import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.exception.ConfigParseException;
-import com.unrealdinnerbone.unreallib.Namespace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +22,7 @@ public class ListConfig<T> extends ConfigValue<T[]> {
     @Nullable
     private Supplier<List<String>> examples;
 
-    public ListConfig(Namespace id, IProvider provider, @Nullable T[] defaultValue, Class<T[]> clazz) {
+    public ListConfig(ConfigID id, IProvider provider, @Nullable T[] defaultValue, Class<T[]> clazz) {
         super(id, provider, defaultValue);
         this.clazz = clazz;
     }

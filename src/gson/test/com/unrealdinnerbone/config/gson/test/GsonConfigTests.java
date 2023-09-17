@@ -1,6 +1,8 @@
 package com.unrealdinnerbone.config.gson.test;
 
 import com.github.marschall.memoryfilesystem.MemoryFileSystemBuilder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.unrealdinnerbone.config.ConfigManager;
 import com.unrealdinnerbone.config.exception.ConfigException;
 import com.unrealdinnerbone.config.gson.GsonProvider;
@@ -29,7 +31,7 @@ public class GsonConfigTests {
     @Test
     public void testBasicConfig() throws ConfigException, IOException {
         Path path = fileSystem.getPath("test.json");
-        GsonParser provider = JsonUtil.createParser(gsonBuilder -> gsonBuilder);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String testConfig = """
                 {
                     "test": {
@@ -48,7 +50,7 @@ public class GsonConfigTests {
                 """;
 
         Files.writeString(path, testConfig);
-        ConfigManager configManager = new ConfigManager(new GsonProvider(path, provider));
+        ConfigManager configManager = new ConfigManager(new GsonProvider(path, gson));
         TestConfig testConfig1 = configManager.loadConfig("test", TestConfig::new);
         Assertions.assertEquals("Hello World", testConfig1.stringConfig.getExceptionally());
         Assertions.assertEquals(true, testConfig1.booleanConfig.getExceptionally());

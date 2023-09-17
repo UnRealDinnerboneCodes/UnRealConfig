@@ -12,9 +12,9 @@ sourceSets.main.java.srcDirs = [projectDir.parentFile.parentFile.absolutePath + 
 sourceSets.test.java.srcDirs = [projectDir.parentFile.parentFile.absolutePath + "\\src\\core\\test"]
 
 dependencies {
-    api "com.unrealdinnerbone:UnRealLib-core:8.2.0"
+    api 'org.slf4j:slf4j-api:2.0.6'
+    api 'org.jetbrains:annotations:24.0.0'
 }
-
 
 compileJava {
     options.release = 17
