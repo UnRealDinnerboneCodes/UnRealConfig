@@ -12,7 +12,7 @@ sourceSets.main.java.srcDirs = [projectDir.parentFile.parentFile.absolutePath + 
 sourceSets.test.java.srcDirs = [projectDir.parentFile.parentFile.absolutePath + "\\src\\core\\test"]
 
 dependencies {
-    api 'com.unrealdinnerbone:UnRealLib-core:8.0.0+build.162'
+    api 'com.unrealdinnerbone:UnRealLib-core:8.0.0+build.165'
 }
 
 
