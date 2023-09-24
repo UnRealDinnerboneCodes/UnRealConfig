@@ -5,6 +5,8 @@ import com.unrealdinnerbone.config.api.ConfigValue;
 import com.unrealdinnerbone.config.api.IProvider;
 import com.unrealdinnerbone.config.config.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public record ConfigCreator(String id, IProvider provider, Consumer<ConfigValue<?>> creationCallback) {
@@ -14,6 +16,19 @@ public record ConfigCreator(String id, IProvider provider, Consumer<ConfigValue<
         creationCallback.accept(apply);
         provider.onConfigCreated(apply);
         return apply;
+    }
+
+
+    public <T, V> MapConfig<T, V> createMap(String key, Map<T, V> defaultValue) {
+        return create(key, defaultValue, (ConfigID namespace, IProvider provider, Map<T, V> defaultValue1) -> {
+            Class<Map<T, V>> mapClass = castMap();
+            return new MapConfig<>(namespace, provider, mapClass, defaultValue1);
+        });
+    }
+
+    private static <T, V> Class<Map<T, V>> castMap() {
+        Class<? extends Map> aClass = Map.class.cast(new HashMap<>()).getClass();
+        return (Class<Map<T, V>>) aClass;
     }
 
     public BooleanConfig createBoolean(String key, boolean defaultValue) {

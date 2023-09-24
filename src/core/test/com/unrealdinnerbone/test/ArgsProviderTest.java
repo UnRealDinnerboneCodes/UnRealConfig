@@ -21,6 +21,7 @@ public class ArgsProviderTest {
             Assertions.assertEquals(1.0F, testConfig1.floatConfig.getExceptionally(), 0.0F);
             Assertions.assertEquals(1, testConfig1.integerConfig.getExceptionally().intValue());
             Assertions.assertEquals(TestEnum.BAD, testConfig1.enumConfig.getExceptionally());
+            Assertions.assertThrows(ConfigException.class, testConfig1.mapConfig::getExceptionally);
         }catch (ConfigException e) {
             Assertions.fail(e.getMessage());
         }

@@ -3,6 +3,9 @@ package com.unrealdinnerbone.test;
 import com.unrealdinnerbone.config.config.*;
 import com.unrealdinnerbone.config.ConfigCreator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TestConfig {
 
     public final BooleanConfig booleanConfig;
@@ -18,6 +21,8 @@ public class TestConfig {
 
     public final ListConfig<String> stringListConfig;
 
+    public final MapConfig<String, String> mapConfig;
+
 
     public TestConfig(ConfigCreator creator) {
         this.stringConfig = creator.createString("string", null);
@@ -27,6 +32,10 @@ public class TestConfig {
         this.integerConfig = creator.createInteger("integer", 0);
         this.enumConfig = creator.createEnum("enum", TestEnum.GOOD, TestEnum.class);
         this.stringListConfig = creator.createList("string_list", new String[]{"one", "two"}, String[].class);
+        Map<String, String> testMap = new HashMap<>();
+        testMap.put("Hello", "World");
+        testMap.put("Hello2", "World2");
+        this.mapConfig = creator.createMap("map", testMap);
     }
 
 }

@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class GsonConfigTests {
 
@@ -58,7 +59,11 @@ public class GsonConfigTests {
                         "list": [
                             "Hello World",
                             "Hello World Again"
-                        ]
+                        ],
+                        "map": {
+                            "Hello": "There",
+                            "Hello2": "General Kenobi"
+                        }
                     }
                 }
                 """;
@@ -73,6 +78,10 @@ public class GsonConfigTests {
         Assertions.assertEquals(1, testConfig1.integerConfig.getExceptionally());
         Assertions.assertEquals(TestEnum.GOOD, testConfig1.enumConfig.getExceptionally());
         Assertions.assertTrue(Arrays.stream(testConfig1.listConfig.getExceptionally()).toList().containsAll(List.of("Hello World", "Hello World Again")));
+
+        Map<String, String> exceptionally = testConfig1.mapConfig.getExceptionally();
+        Assertions.assertEquals("There", exceptionally.get("Hello"));
+        Assertions.assertEquals("General Kenobi", exceptionally.get("Hello2"));
 
         testConfig1.booleanConfig.set(false);
         testConfig1.booleanConfig.save();
