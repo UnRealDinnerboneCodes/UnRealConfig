@@ -33,6 +33,10 @@ public abstract class Provider<T> {
         return configInstance;
     }
 
+    public ConfigCategory getConfigCategory() {
+        return configCategory;
+    }
+
     public void addConfigValue(ConfigValue<?> configValue) {
         configCategory.addConfigValue(configValue);
     }
