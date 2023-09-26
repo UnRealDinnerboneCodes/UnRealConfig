@@ -35,11 +35,6 @@ public abstract class ConfigValue<T> {
         return value;
     }
 
-    public List<String> getExamples() {
-        return Collections.emptyList();
-    }
-
-
     public final void fromJsonElement(Gson gson, JsonElement jsonElement) throws ConfigParseException {
         try {
             this.value = serialize(gson, jsonElement);

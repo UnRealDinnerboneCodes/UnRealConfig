@@ -61,6 +61,10 @@ public class ConfigTest {
             Map<String, String> exceptionally = testConfig.mapConfig.get();
             Assertions.assertEquals("General", exceptionally.get("Hello"));
             Assertions.assertEquals("Kenobi", exceptionally.get("Hello2"));
+            Map<String, TestConfig.TestData> stringTestEnumMap = testConfig.enumMapConfig.get();
+            for (Map.Entry<String, TestConfig.TestData> value : stringTestEnumMap.entrySet()) {
+                Assertions.assertEquals(value.getKey(), value.getValue().value());
+            }
         }
     }
 
