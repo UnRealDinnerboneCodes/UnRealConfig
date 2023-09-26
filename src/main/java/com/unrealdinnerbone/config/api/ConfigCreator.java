@@ -8,6 +8,7 @@ import com.unrealdinnerbone.config.config.ConfigValue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class ConfigCreator {
 
@@ -27,6 +28,11 @@ public class ConfigCreator {
                 return configValue;
             }
         };
+    }
+
+    public <T> T createGroup(String name, Function<ConfigCreator, T> creatorFunction) {
+        ConfigCreator group = createGroup(name);
+        return creatorFunction.apply(group);
     }
 
     public <D, R extends ConfigValue<D>> R create(R configValue) {
