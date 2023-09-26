@@ -13,15 +13,15 @@ import java.util.function.Function;
 public class ConfigCreator {
 
 
-    private final ConfigCategory configCategory;
-    public ConfigCreator(ConfigCategory configCategory) {
-        this.configCategory = configCategory;
+    private final Provider<?> provider;
+    public ConfigCreator(Provider<?> provider) {
+        this.provider = provider;
     }
 
 
     public ConfigCreator createGroup(String name) {
         ConfigCategory configCategory = create(new ConfigCategory(name, new ArrayList<>()));
-        return new ConfigCreator(configCategory) {
+        return new ConfigCreator(provider) {
             @Override
             public <D, R extends ConfigValue<D>> R create(R configValue) {
                 configCategory.addConfigValue(configValue);
@@ -36,7 +36,7 @@ public class ConfigCreator {
     }
 
     public <D, R extends ConfigValue<D>> R create(R configValue) {
-        configCategory.addConfigValue(configValue);
+        provider.getConfigCategory().addConfigValue(configValue);
         return configValue;
     }
 
@@ -72,5 +72,9 @@ public class ConfigCreator {
 
     public StringConfig createString(String key, String defaultValue) {
         return create(new StringConfig(key, defaultValue));
+    }
+
+    public Provider<?> getProvider() {
+        return provider;
     }
 }

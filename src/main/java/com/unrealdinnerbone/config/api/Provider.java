@@ -17,7 +17,7 @@ public abstract class Provider<T> {
 
     public Provider(Gson gson, Function<ConfigCreator, T> configFunction) {
         this.configCategory = new ConfigCategory("", new ArrayList<>());
-        this.configInstance = configFunction.apply(new ConfigCreator(configCategory));
+        this.configInstance = configFunction.apply(new ConfigCreator(this));
         this.gson = gson;
     }
 
