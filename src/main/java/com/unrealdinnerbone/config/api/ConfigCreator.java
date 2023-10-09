@@ -1,7 +1,6 @@
 package com.unrealdinnerbone.config.api;
 
 import com.google.gson.reflect.TypeToken;
-import com.sun.source.util.Plugin;
 import com.unrealdinnerbone.config.config.*;
 import com.unrealdinnerbone.config.config.ConfigCategory;
 import com.unrealdinnerbone.config.config.ConfigValue;
@@ -51,6 +50,11 @@ public class ConfigCreator {
     public <V> ConfigValue<Map<String, V>> createMap(String key, Map<String, V> defaultValue, Class<V> clazz) {
         return create(new TypedConfigValue<>(key, defaultValue, TypeToken.getParameterized(Map.class, String.class, clazz).getType()));
     }
+
+    public <K, V> ConfigValue<Map<K, V>> createMap(String key, Map<K, V> defaultValue, Class<K> kClass, Class<V> vClass) {
+        return create(new TypedConfigValue<>(key, defaultValue, TypeToken.getParameterized(Map.class, kClass, vClass).getType()));
+    }
+
 
     public ConfigValue<Boolean> createBoolean(String key, boolean defaultValue) {
         return createGeneric(key, defaultValue, Boolean.class);
