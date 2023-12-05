@@ -9,52 +9,47 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ConfigCreator {
 
 
-    private final Provider<?> provider;
-    public ConfigCreator(Provider<?> provider) {
-        this.provider = provider;
-    }
+    private final ConfigCategory category;
 
-
-    public ConfigCreator createGroup(String name) {
-        ConfigCategory configCategory = create(new ConfigCategory(name, new ArrayList<>()));
-        return new ConfigCreator(provider) {
-            @Override
-            public <D, R extends ConfigValue<D>> R create(R configValue) {
-                configCategory.addConfigValue(configValue);
-                return configValue;
-            }
-        };
-    }
-
-
-    public <T> T createGroup(String name, Function<ConfigCreator, T> creatorFunction) {
-        ConfigCreator group = createGroup(name);
-        return creatorFunction.apply(group);
+    private boolean checkForDuplicates;
+    public ConfigCreator(ConfigCategory category) {
+        this.category = category;
+        this.checkForDuplicates = true;
     }
 
     public <D, R extends ConfigValue<D>> R create(R configValue) {
-        provider.getConfigCategory().addConfigValue(configValue);
+        category.add(configValue, checkForDuplicates);
         return configValue;
     }
 
-    public <T> ConfigValue<T> createGeneric(String key, T defaultValue, Class<T> clazz) {
-        return create(new TypedConfigValue<T>(key, defaultValue, clazz));
+    public ConfigCategory createCategory(String name) {
+        return create(new ConfigCategory(name));
     }
 
 
-    public <V> ConfigValue<Map<String, V>> createMap(String key, Map<String, V> defaultValue, Class<V> clazz) {
-        return create(new TypedConfigValue<>(key, defaultValue, TypeToken.getParameterized(Map.class, String.class, clazz).getType()));
+    public <T> T createCategory(String name, Function<ConfigCreator, T> creatorFunction) {
+        ConfigCreator group = createCategory(name).getCreator();
+        return creatorFunction.apply(group);
+    }
+
+
+    public <T> ConfigValue<T> createGeneric(String key, T defaultValue, Class<T> clazz) {
+        return create(new TypedConfigValue<>(key, defaultValue, clazz));
     }
 
     public <K, V> ConfigValue<Map<K, V>> createMap(String key, Map<K, V> defaultValue, Class<K> kClass, Class<V> vClass) {
         return create(new TypedConfigValue<>(key, defaultValue, TypeToken.getParameterized(Map.class, kClass, vClass).getType()));
     }
 
+    public <V> ConfigValue<Map<String, V>> createMap(String key, Map<String, V> defaultValue, Class<V> clazz) {
+        return createMap(key, defaultValue, String.class, clazz);
+    }
 
     public ConfigValue<Boolean> createBoolean(String key, boolean defaultValue) {
         return createGeneric(key, defaultValue, Boolean.class);
@@ -65,7 +60,7 @@ public class ConfigCreator {
     }
 
     public <E extends Enum<E>> ConfigValue<E> createEnum(String key, E defaultValue, Class<E> eClass) {
-        return create(createGeneric(key, defaultValue, eClass));
+        return createGeneric(key, defaultValue, eClass);
     }
 
     public <E> ConfigValue<List<E>> createList(String key, List<E> defaultValue, Class<E> clazz) {
@@ -83,7 +78,8 @@ public class ConfigCreator {
         return createGeneric(key, defaultValue, String.class);
     }
 
-    public Provider<?> getProvider() {
-        return provider;
+    public void setCheckForDuplicates(boolean checkForDuplicates) {
+        this.checkForDuplicates = checkForDuplicates;
     }
+
 }

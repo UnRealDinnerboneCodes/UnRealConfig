@@ -38,7 +38,7 @@ public class TestConfig {
         this.mapConfig = creator.createMap("map", Map.of("Hello", "World", "Hello2","World2"), String.class);
         this.enumMapConfig = creator.createMap("enum_map", Map.of("Good", new TestData("Good"), "Bad", new TestData("Bad")), TestData.class);
 
-        ConfigCreator nestedCreator = creator.createGroup("nested");
+        ConfigCreator nestedCreator = creator.createCategory("nested").getCreator();
         nestedConfigOne = nestedCreator.createString("string", "Hello World");
 
     }

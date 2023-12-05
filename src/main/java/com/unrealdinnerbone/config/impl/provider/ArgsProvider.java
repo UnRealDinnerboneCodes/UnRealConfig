@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class ArgsProvider<T> extends Provider<T> {
+public class ArgsProvider extends Provider {
     private final Map<String, String> args = new HashMap<>();
 
-    public ArgsProvider(String[] args, Function<ConfigCreator, T> configFunction) {
-        super(configFunction);
+    public ArgsProvider(String[] args) {
+        super();
         for (String arg : args) {
             if (arg.startsWith("--")) {
                 String[] split = arg.split("=");

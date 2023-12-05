@@ -4,15 +4,20 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.unrealdinnerbone.config.api.ConfigCreator;
 import com.unrealdinnerbone.config.api.exception.ConfigParseException;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class ConfigCategory extends ConfigValue<List<ConfigValue<?>>> {
 
-    public ConfigCategory(String id, @NotNull List<ConfigValue<?>> configValues) {
-        super(id, configValues);
+    private final ConfigCreator creator;
+    public ConfigCategory(String id) {
+        super(id, new ArrayList<>());
+        this.creator = new ConfigCreator(this);
     }
 
     @Override
@@ -47,6 +52,18 @@ public class ConfigCategory extends ConfigValue<List<ConfigValue<?>>> {
         }
     }
 
+    public void add(ConfigValue<?> configValue, boolean check) throws IllegalStateException {
+        List<ConfigValue<?>> values = get();
+        if(check) {
+            for (ConfigValue<?> value : values) {
+                if(value.getId().equals(configValue.getId())) {
+                    throw new IllegalStateException("ConfigValue with id " + configValue.getId() + " already exists");
+                }
+            }
+        }
+        values.add(configValue);
+    }
+
     @Override
     public JsonElement deserialize(Gson gson, List<ConfigValue<?>> value) throws ConfigParseException {
         JsonObject jsonObject = new JsonObject();
@@ -64,10 +81,16 @@ public class ConfigCategory extends ConfigValue<List<ConfigValue<?>>> {
         return jsonObject;
     }
 
-    public void addConfigValue(ConfigValue<?> configValue) {
-        get().add(configValue);
+    public ConfigCreator getCreator() {
+        return creator;
     }
 
 
+    public <T> T addFromClass(Function<ConfigCreator, T> creatorTFunction) {
+        return creatorTFunction.apply(creator);
+    }
 
+    public <T> T addFromClass(String base, Function<ConfigCreator, T> creatorTFunction) {
+        return creator.createCategory(base).addFromClass(creatorTFunction);
+    }
 }

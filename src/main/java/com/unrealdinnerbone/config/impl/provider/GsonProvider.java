@@ -14,11 +14,11 @@ import java.nio.file.Path;
 import java.util.function.Function;
 
 
-public class GsonProvider<T> extends Provider<T> {
+public class GsonProvider extends Provider {
     private final Path path;
 
-    public GsonProvider(Path path, Gson gson, Function<ConfigCreator, T> configFunction)  {
-        super(gson, configFunction);
+    public GsonProvider(Path path, Gson gson)  {
+        super(gson);
         this.path = path;
     }
 
@@ -47,7 +47,7 @@ public class GsonProvider<T> extends Provider<T> {
         }
     }
 
-    private static void writeString(Path path, String string) throws ConfigException{
+    private static void writeString(Path path, String string) throws ConfigException {
         try {
             Files.writeString(path, string);
         } catch (IOException e) {

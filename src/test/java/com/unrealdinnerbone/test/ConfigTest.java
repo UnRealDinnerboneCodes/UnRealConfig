@@ -2,6 +2,8 @@ package com.unrealdinnerbone.test;
 
 
 import com.unrealdinnerbone.config.api.exception.ConfigException;
+import com.unrealdinnerbone.config.config.ConfigValue;
+import com.unrealdinnerbone.config.config.TypedConfigValue;
 import com.unrealdinnerbone.config.impl.provider.ArgsProvider;
 import com.unrealdinnerbone.test.data.TestConfig;
 import com.unrealdinnerbone.test.data.TestEnum;
@@ -9,14 +11,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
 public class ConfigTest {
     @Test
     public void testConfig() {
-        ArgsProvider<TestConfig> argsProvider = new ArgsProvider<>(new String[]{"--test_boolean=true"}, TestConfig::new);
-        TestConfig testConfig = argsProvider.getConfig();
+        ArgsProvider argsProvider = new ArgsProvider(new String[]{"--test_boolean=true"});
+        TestConfig testConfig = argsProvider.loadConfig(TestConfig::new);
         Assertions.assertTrue(testConfig.booleanConfig.get());
     }
 
@@ -70,8 +74,8 @@ public class ConfigTest {
 
     @Test
     public void testBadEnumValue() throws IOException, ConfigException {
-        ArgsProvider<TestConfig> provider = new ArgsProvider<>(new String[]{"--enum=TRASH"}, TestConfig::new);
-        TestConfig testConfig = provider.getConfig();
+        ArgsProvider provider = new ArgsProvider(new String[]{"--enum=TRASH"});
+        TestConfig testConfig = provider.loadConfig(TestConfig::new);
         provider.read();
         Assertions.assertNull(testConfig.enumConfig.get());
     }

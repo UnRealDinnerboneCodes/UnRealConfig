@@ -10,9 +10,10 @@ public class ArgsProviderTest {
     @Test
     public void test() throws ConfigException {
         String[] args = new String[]{"--string=Hello", "--boolean", "--double=1.0", "--float=1.0", "--integer=1", "--enum=BAD"};
-        ArgsProvider<TestConfig> argsProvider = new ArgsProvider<>(args, TestConfig::new);
-        ConfigTest.assetConfigDefaultValues(argsProvider.getConfig(), false);
+        ArgsProvider argsProvider = new ArgsProvider(args);
+        TestConfig testConfig = argsProvider.loadConfig(TestConfig::new);
+        ConfigTest.assetConfigDefaultValues(testConfig, false);
         argsProvider.read();
-        ConfigTest.changeConfigValues(argsProvider.getConfig());
+        ConfigTest.changeConfigValues(testConfig);
     }
 }

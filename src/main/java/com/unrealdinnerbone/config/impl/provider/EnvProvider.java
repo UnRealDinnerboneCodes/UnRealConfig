@@ -10,11 +10,7 @@ import com.unrealdinnerbone.config.config.ConfigValue;
 
 import java.util.function.Function;
 
-public class EnvProvider<T> extends Provider<T> {
-
-    public EnvProvider(Function<ConfigCreator, T> configFunction) {
-        super(configFunction);
-    }
+public class EnvProvider<T> extends Provider {
 
     @Override
     public void read() throws ConfigException {
