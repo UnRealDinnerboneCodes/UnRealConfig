@@ -23,7 +23,7 @@ public class EnvProvider<T> extends Provider {
                 handleCategory(parent + configCategory.getId() + "_", category1);
             }else {
                 String string = System.getenv(parent + configValue.getId());
-                configValue.fromJsonElement(gson, new JsonPrimitive(string).getAsJsonObject());
+                configValue.fromJsonElement(gson, configValue.createElement(string).getAsJsonObject());
             }
         }
     }

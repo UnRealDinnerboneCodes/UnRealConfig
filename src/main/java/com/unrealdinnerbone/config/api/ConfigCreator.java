@@ -1,5 +1,8 @@
 package com.unrealdinnerbone.config.api;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.unrealdinnerbone.config.config.*;
 import com.unrealdinnerbone.config.config.ConfigCategory;
@@ -7,6 +10,7 @@ import com.unrealdinnerbone.config.config.ConfigValue;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -64,7 +68,12 @@ public class ConfigCreator {
     }
 
     public <E> ConfigValue<List<E>> createList(String key, List<E> defaultValue, Class<E> clazz) {
-        return create(new TypedConfigValue<>(key, defaultValue, TypeToken.getParameterized(List.class, clazz).getType()));
+        return create(new TypedConfigValue<>(key, defaultValue, TypeToken.getParameterized(List.class, clazz).getType()) {
+            @Override
+            public JsonElement createElement(String string) {
+                return JsonParser.parseString("[" + string + "]").getAsJsonArray();
+            }
+        });
     }
     public ConfigValue<Float> createFloat(String key, float defaultValue) {
         return createGeneric(key, defaultValue, Float.class);

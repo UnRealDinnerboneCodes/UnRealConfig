@@ -3,6 +3,7 @@ package com.unrealdinnerbone.config.config;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
+import com.google.gson.JsonPrimitive;
 import com.unrealdinnerbone.config.api.exception.ConfigParseException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +34,10 @@ public abstract class ConfigValue<T> {
 
     public T get() {
         return value;
+    }
+
+    public JsonElement createElement(String string) {
+        return new JsonPrimitive(string);
     }
 
     public final void fromJsonElement(Gson gson, JsonElement jsonElement) throws ConfigParseException {

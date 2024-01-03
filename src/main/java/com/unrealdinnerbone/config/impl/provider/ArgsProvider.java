@@ -7,8 +7,11 @@ import com.unrealdinnerbone.config.api.exception.ConfigException;
 import com.unrealdinnerbone.config.api.exception.ConfigParseException;
 import com.unrealdinnerbone.config.config.ConfigCategory;
 import com.unrealdinnerbone.config.config.ConfigValue;
+import com.unrealdinnerbone.config.config.TypedConfigValue;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -43,7 +46,7 @@ public class ArgsProvider extends Provider {
                 if(string == null) {
                     configValue.setValue(null);
                 }else {
-                    configValue.fromJsonElement(gson, new JsonPrimitive(string));
+                    configValue.fromJsonElement(gson, configValue.createElement(string));
                 }
             }
         }
