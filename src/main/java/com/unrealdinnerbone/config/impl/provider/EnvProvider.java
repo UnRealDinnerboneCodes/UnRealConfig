@@ -1,5 +1,6 @@
 package com.unrealdinnerbone.config.impl.provider;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.unrealdinnerbone.config.api.ConfigCreator;
 import com.unrealdinnerbone.config.api.Provider;
@@ -20,12 +21,26 @@ public class EnvProvider<T> extends Provider {
     public void handleCategory(String parent, ConfigCategory configCategory) throws ConfigParseException {
         for (ConfigValue<?> configValue : configCategory.get()) {
             if (configValue instanceof ConfigCategory category1) {
-                handleCategory(parent + configCategory.getId() + "_", category1);
+                String envKey = getEnvKey(parent, category1.getId());
+                handleCategory(envKey, category1);
             }else {
-                String string = System.getenv(parent + configValue.getId());
-                configValue.fromJsonElement(gson, configValue.createElement(string).getAsJsonObject());
+                String name = getEnvKey(parent, configValue.getId());
+                String string = System.getenv(name);
+                if(string != null) {
+                    JsonElement element = configValue.createElement(string);
+                    if(element.isJsonObject()) {
+                        configValue.fromJsonElement(gson, element.getAsJsonObject());
+                    }else {
+                        configValue.fromJsonElement(gson, element);
+                    }
+
+                }
             }
         }
+    }
+
+    public String getEnvKey(String parent, String key) {
+        return parent == null || parent.isEmpty() ? key : parent + "_" + key;
     }
 
 }
