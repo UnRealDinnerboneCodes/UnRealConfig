@@ -2,6 +2,7 @@ package com.unrealdinnerbone.config.api;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.unrealdinnerbone.config.config.*;
@@ -71,7 +72,7 @@ public class ConfigCreator {
         return create(new TypedConfigValue<>(key, defaultValue, TypeToken.getParameterized(List.class, clazz).getType()) {
             @Override
             public JsonElement createElement(String string) {
-                return JsonParser.parseString("[" + string + "]").getAsJsonArray();
+                return string == null ? JsonNull.INSTANCE : JsonParser.parseString("[" + string + "]").getAsJsonArray();
             }
         });
     }

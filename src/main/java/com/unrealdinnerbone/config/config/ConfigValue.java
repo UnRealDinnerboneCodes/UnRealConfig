@@ -37,7 +37,7 @@ public abstract class ConfigValue<T> {
     }
 
     public JsonElement createElement(String string) {
-        return new JsonPrimitive(string);
+        return string == null ? JsonNull.INSTANCE : new JsonPrimitive(string);
     }
 
     public final void fromJsonElement(Gson gson, JsonElement jsonElement) throws ConfigParseException {
