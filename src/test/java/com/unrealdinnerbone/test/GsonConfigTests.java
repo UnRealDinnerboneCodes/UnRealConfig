@@ -31,7 +31,7 @@ public class GsonConfigTests {
         GsonProvider gsonProvider = new GsonProvider(path, gson);
         TestConfig testConfig = gsonProvider.loadConfig(TestConfig::new);
         gsonProvider.read();
-        ConfigTest.assetConfigDefaultValues(testConfig, true);
+        ConfigTest.assetConfigDefaultValues(testConfig);
         ConfigTest.changeConfigValues(testConfig);
         ConfigTest.assertChangedConfigValues(testConfig, true);
         gsonProvider.save();

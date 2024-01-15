@@ -25,7 +25,7 @@ public class ConfigTest {
     }
 
 
-    public static void assetConfigDefaultValues(TestConfig testConfig, boolean complex) {
+    public static void assetConfigDefaultValues(TestConfig testConfig) {
         Assertions.assertNull(testConfig.stringConfig.get());
         Assertions.assertEquals(true, testConfig.booleanConfig.get());
         Assertions.assertEquals(0.0, testConfig.doubleConfig.get());
@@ -33,10 +33,8 @@ public class ConfigTest {
         Assertions.assertEquals(0, testConfig.integerConfig.get());
         Assertions.assertEquals(TestEnum.GOOD, testConfig.enumConfig.get());
         Assertions.assertEquals("Hello World", testConfig.nestedConfigOne.get());
-        if(complex) {
-            Assertions.assertTrue(testConfig.listConfig.get().containsAll(List.of("Test2", "Test2")));
-            Assertions.assertEquals(Map.of("Hello", "World", "Hello2", "World2"), testConfig.mapConfig.get());
-        }
+        Assertions.assertTrue(testConfig.listConfig.get().containsAll(List.of("Test2", "Test2")));
+        Assertions.assertEquals(Map.of("Hello", "World", "Hello2", "World2"), testConfig.mapConfig.get());
     }
 
     public static void changeConfigValues(TestConfig testConfig) {

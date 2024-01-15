@@ -49,7 +49,12 @@ public class ConfigCreator {
     }
 
     public <K, V> ConfigValue<Map<K, V>> createMap(String key, Map<K, V> defaultValue, Class<K> kClass, Class<V> vClass) {
-        return create(new TypedConfigValue<>(key, defaultValue, TypeToken.getParameterized(Map.class, kClass, vClass).getType()));
+        return create(new TypedConfigValue<>(key, defaultValue, TypeToken.getParameterized(Map.class, kClass, vClass).getType()) {
+            @Override
+            public JsonElement createElement(String string) {
+                return string == null ? JsonNull.INSTANCE : JsonParser.parseString("{" + string + "}").getAsJsonObject();
+            }
+        });
     }
 
     public <V> ConfigValue<Map<String, V>> createMap(String key, Map<String, V> defaultValue, Class<V> clazz) {

@@ -9,9 +9,10 @@ import com.unrealdinnerbone.config.api.exception.ConfigParseException;
 import com.unrealdinnerbone.config.config.ConfigCategory;
 import com.unrealdinnerbone.config.config.ConfigValue;
 
+import java.util.Map;
 import java.util.function.Function;
 
-public class EnvProvider<T> extends Provider {
+public class EnvProvider extends Provider {
 
     @Override
     public void read() throws ConfigException {
@@ -25,7 +26,7 @@ public class EnvProvider<T> extends Provider {
                 handleCategory(envKey, category1);
             }else {
                 String name = getEnvKey(parent, configValue.getId());
-                String string = System.getenv(name);
+                String string = getEnvMap().getOrDefault(name.toUpperCase(), getEnvMap().get(name));
                 if(string != null) {
                     JsonElement element = configValue.createElement(string);
                     if(element.isJsonObject()) {
@@ -37,6 +38,10 @@ public class EnvProvider<T> extends Provider {
                 }
             }
         }
+    }
+
+    public Map<String, String> getEnvMap() {
+        return System.getenv();
     }
 
     public String getEnvKey(String parent, String key) {
