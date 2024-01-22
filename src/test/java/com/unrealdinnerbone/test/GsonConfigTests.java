@@ -30,7 +30,7 @@ public class GsonConfigTests {
 
     @Test
     public void testGson() throws ConfigException {
-        GsonProvider gsonProvider = new GsonProvider(path, gson);
+        GsonProvider gsonProvider = new GsonProvider(path, gson, false);
         TestConfig testConfig = gsonProvider.loadConfig(TestConfig::new);
         gsonProvider.read();
         ConfigTest.assetConfigDefaultValues(testConfig);
@@ -50,7 +50,7 @@ public class GsonConfigTests {
     public void testInvalidJsonSting() throws IOException {
         Path path = fileSystem.getPath("test_json_string.json");
         Files.writeString(path, "{\"string\": {\"bad\":\"value\"}}");
-        GsonProvider gsonProvider = new GsonProvider(path, gson);
+        GsonProvider gsonProvider = new GsonProvider(path, gson, false);
         gsonProvider.loadConfig(TestConfig::new);
         Assertions.assertThrows(ConfigException.class, gsonProvider::read);
     }
@@ -59,7 +59,7 @@ public class GsonConfigTests {
     public void testInvalidJsonBoolean() throws IOException {
         Path path = fileSystem.getPath("test_json_boolean.json");
         Files.writeString(path, " {\"boolean\": \"talse\"}");
-        GsonProvider gsonProvider = new GsonProvider(path, gson);
+        GsonProvider gsonProvider = new GsonProvider(path, gson, false);
         TestConfig testConfig = gsonProvider.loadConfig(TestConfig::new);
         Assertions.assertDoesNotThrow(gsonProvider::read);
     }
@@ -68,7 +68,7 @@ public class GsonConfigTests {
     public void testInvalidJsonDouble() throws IOException {
         Path path = fileSystem.getPath("test_json_double.json");
         Files.writeString(path, "{\"double\": {\"hello\": \"there\"}}");
-        GsonProvider gsonProvider = new GsonProvider(path, gson);
+        GsonProvider gsonProvider = new GsonProvider(path, gson, false);
         TestConfig testConfig = gsonProvider.loadConfig(TestConfig::new);
         Assertions.assertThrows(ConfigException.class, gsonProvider::read);
     }
@@ -77,7 +77,7 @@ public class GsonConfigTests {
     public void testInvalidJsonFloat() throws IOException {
         Path path = fileSystem.getPath("test_json_float.json");
         Files.writeString(path, "{\"float\": [1.0, 1.0]}");
-        GsonProvider gsonProvider = new GsonProvider(path, gson);
+        GsonProvider gsonProvider = new GsonProvider(path, gson, false);
         TestConfig testConfig = gsonProvider.loadConfig(TestConfig::new);
         Assertions.assertThrows(ConfigException.class, gsonProvider::read);
     }
@@ -86,7 +86,7 @@ public class GsonConfigTests {
     public void testInvalidJsonEnum() throws IOException, ConfigException {
         Path path = fileSystem.getPath("test_json_enum.json");
         Files.writeString(path, "{\"enum\": \"OK\"}");
-        GsonProvider gsonProvider = new GsonProvider(path, gson);
+        GsonProvider gsonProvider = new GsonProvider(path, gson, false);
         TestConfig testConfig = gsonProvider.loadConfig(TestConfig::new);
         gsonProvider.read();
         Assertions.assertNull(testConfig.enumConfig.get());
@@ -96,7 +96,7 @@ public class GsonConfigTests {
     public void testInvalidJsonInt() throws IOException {
         Path path = fileSystem.getPath("test_json_int.json");
         Files.writeString(path, "{\"integer\": \"BAD\"}");
-        GsonProvider gsonProvider = new GsonProvider(path, gson);
+        GsonProvider gsonProvider = new GsonProvider(path, gson, false);
         TestConfig testConfig = gsonProvider.loadConfig(TestConfig::new);
         Assertions.assertThrows(ConfigException.class, gsonProvider::read);
     }
@@ -105,7 +105,7 @@ public class GsonConfigTests {
     public void testInvalidJsonList() throws IOException {
         Path path = fileSystem.getPath("test_json_list.json");
         Files.writeString(path, "{\"list\": \"OK\"}");
-        GsonProvider gsonProvider = new GsonProvider(path, gson);
+        GsonProvider gsonProvider = new GsonProvider(path, gson, false);
         TestConfig testConfig = gsonProvider.loadConfig(TestConfig::new);
         Assertions.assertThrows(ConfigException.class, gsonProvider::read);
     }
@@ -114,7 +114,7 @@ public class GsonConfigTests {
     public void testInvalidJsonMap() throws IOException {
         Path path = fileSystem.getPath("test_json_map.json");
         Files.writeString(path, "{\"map\": [\"LIST?\"]}");
-        GsonProvider gsonProvider = new GsonProvider(path, gson);
+        GsonProvider gsonProvider = new GsonProvider(path, gson, false);
         TestConfig testConfig = gsonProvider.loadConfig(TestConfig::new);
         Assertions.assertThrows(ConfigException.class, gsonProvider::read);
     }
