@@ -3,7 +3,9 @@ package com.unrealdinnerbone.test;
 import com.github.marschall.memoryfilesystem.MemoryFileSystemBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.unrealdinnerbone.config.api.ConfigCreator;
 import com.unrealdinnerbone.config.api.exception.ConfigException;
+import com.unrealdinnerbone.config.config.ConfigValue;
 import com.unrealdinnerbone.config.impl.provider.GsonProvider;
 import com.unrealdinnerbone.test.data.TestConfig;
 import org.junit.jupiter.api.*;
@@ -117,6 +119,33 @@ public class GsonConfigTests {
         Assertions.assertThrows(ConfigException.class, gsonProvider::read);
     }
 
+
+    private static final String TEST_JSON = """
+            {
+              "config": "cake",
+              "extra": {
+                "config": "cake"
+              }
+            }""";
+    @Test
+    public void testExtraData() throws IOException, ConfigException {
+        Path path1 = fileSystem.getPath("test_extra.json");
+        GsonProvider gsonProvider = new GsonProvider(path1, gson);
+        Files.writeString(path1, TEST_JSON);
+        SimpleConfig simpleConfig = gsonProvider.loadConfig(SimpleConfig::new);
+        gsonProvider.save();
+        String s = Files.readString(path1);
+        Assertions.assertEquals(TEST_JSON, s);
+    }
+
+
+    public class SimpleConfig {
+
+        private final ConfigValue<String> config;
+        public SimpleConfig(ConfigCreator creator) {
+            this.config = creator.createString("config", "test");
+        }
+    }
 
 
 }

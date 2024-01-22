@@ -16,10 +16,18 @@ import java.util.function.Function;
 
 public class GsonProvider extends Provider {
     private final Path path;
+    private final boolean loadExtra;
 
     public GsonProvider(Path path, Gson gson)  {
         super(gson);
         this.path = path;
+        this.loadExtra = true;
+    }
+
+    public GsonProvider(Path path, Gson gson, boolean loadExtra)  {
+        super(gson);
+        this.path = path;
+        this.loadExtra = loadExtra;
     }
 
     @Override
@@ -34,7 +42,12 @@ public class GsonProvider extends Provider {
 
     @Override
     public boolean save() throws ConfigException {
-        writeString(path, gson.toJson(configCategory.asJsonElement(gson)));
+        JsonObject jsonElement = configCategory.asJsonElement(gson).getAsJsonObject();
+        if(loadExtra) {
+            JsonObject readValue = gson.fromJson(readString(path), JsonObject.class);
+            mergeObject(jsonElement, readValue);
+        }
+        writeString(path, gson.toJson(jsonElement));
         return true;
     }
 
@@ -52,6 +65,25 @@ public class GsonProvider extends Provider {
             Files.writeString(path, string);
         } catch (IOException e) {
             throw new ConfigLoadException("Could not write config at " + path, e);
+        }
+    }
+
+
+    private static void mergeObject(JsonObject into, JsonObject merging) {
+        for (String overrideKey : merging.keySet()) {
+            JsonElement element = merging.get(overrideKey);
+
+            if (element.isJsonObject()) {
+                JsonElement original = into.get(overrideKey);
+                if (original != null && original.isJsonObject()) {
+                    mergeObject(original.getAsJsonObject(), element.getAsJsonObject());
+                } else {
+                    into.add(overrideKey, element);
+                }
+            } else {
+                into.add(overrideKey, element);
+            }
+
         }
     }
 
