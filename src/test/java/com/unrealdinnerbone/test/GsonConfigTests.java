@@ -15,7 +15,9 @@ import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GsonConfigTests {
 
@@ -143,21 +145,50 @@ public class GsonConfigTests {
 
     private static final String TEST_EXISTING_DATA = """
             {
-              "enabled": "o"
+              "enabled": "o",
+              "cheese:": "cake",
+              "map": {
+                "enabled": "o",
+                "cheese": "cake"
+              },
+              "sub": {
+                "enabled": "o",
+                "cheese": "cake",
+                "map": {
+                  "enabled": "o",
+                  "cheese": "cake"
+                }
+              }
             }""";
 
     private static final String TEST_EXISTING_DATA_WANTED = """
             {
-              "enabled": "light"
+              "enabled": "light",
+              "cheese:": "cake",
+              "map": {
+                "enabled": "light",
+                "cheese": "cake"
+              },
+              "sub": {
+                "enabled": "light",
+                "cheese": "cake",
+                "map": {
+                  "enabled": "light",
+                  "cheese": "cake"
+                }
+              }
             }""";
     @Test
     public void testExistingData() throws IOException, ConfigException {
         Path path1 = fileSystem.getPath("test_extra.json");
         GsonProvider gsonProvider = new GsonProvider(path1, gson);
         Files.writeString(path1, TEST_EXISTING_DATA);
-        SimpleEnabled simpleConfig = gsonProvider.loadConfig(SimpleEnabled::new);
+        SimpleEnabled simpleConfig = gsonProvider.loadConfig(creator -> new SimpleEnabled(creator, true));
         gsonProvider.read();
         simpleConfig.enabled.setValue("light");
+        simpleConfig.sub.enabled.setValue("light");
+        simpleConfig.map.get().put("enabled", "light");
+        simpleConfig.sub.map.get().put("enabled", "light");
         gsonProvider.save();
         String s = Files.readString(path1);
         Assertions.assertEquals(TEST_EXISTING_DATA_WANTED, s);
@@ -176,9 +207,18 @@ public class GsonConfigTests {
 
         private final ConfigValue<String> enabled;
 
+        private final ConfigValue<Map<String, String>> map;
+        private final SimpleEnabled sub;
 
-        public SimpleEnabled(ConfigCreator creator) {
+
+        public SimpleEnabled(ConfigCreator creator, boolean sub) {
             this.enabled = creator.createString("enabled", "cheese");
+            this.map = creator.createMap("map", new HashMap<>(), String.class);
+            if(sub) {
+                this.sub = creator.createCategory("sub", creator1 -> new SimpleEnabled(creator1, false));
+            }else {
+                this.sub = null;
+            }
         }
     }
 

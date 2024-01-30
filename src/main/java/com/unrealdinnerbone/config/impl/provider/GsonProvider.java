@@ -85,7 +85,8 @@ public class GsonProvider extends Provider {
             if (element.isJsonObject()) {
                 JsonElement original = into.get(overrideKey);
                 if (original != null && original.isJsonObject()) {
-                    mergeObject(original.getAsJsonObject(), element.getAsJsonObject());
+                    JsonObject theNewObject = mergeObject(original.getAsJsonObject(), element.getAsJsonObject());
+                    newObject.add(overrideKey, theNewObject);
                 } else {
                     newObject.add(overrideKey, element);
                 }
