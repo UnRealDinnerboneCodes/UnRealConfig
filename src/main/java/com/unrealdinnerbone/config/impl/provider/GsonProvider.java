@@ -14,8 +14,6 @@ import java.nio.file.Path;
 import java.util.function.Function;
 
 
-//Todo something about reading the config better
-//basicly something to help with reading after adding configs
 public class GsonProvider extends Provider {
     private final Path path;
     private final boolean loadExtra;
@@ -45,7 +43,6 @@ public class GsonProvider extends Provider {
     @Override
     public boolean save() throws ConfigException {
         JsonObject jsonElement = configCategory.asJsonElement(gson).getAsJsonObject();
-        //Todo add test for ensuring path
         if(loadExtra && Files.exists(path)) {
             JsonObject readValue = gson.fromJson(readString(path), JsonObject.class);
             mergeObject(jsonElement, readValue);
@@ -72,10 +69,9 @@ public class GsonProvider extends Provider {
     }
 
 
-    private static void mergeObject(JsonObject into, JsonObject merging) {
+    private static void mergeObject(JsonObject merging, JsonObject into) {
         for (String overrideKey : merging.keySet()) {
             JsonElement element = merging.get(overrideKey);
-
             if (element.isJsonObject()) {
                 JsonElement original = into.get(overrideKey);
                 if (original != null && original.isJsonObject()) {

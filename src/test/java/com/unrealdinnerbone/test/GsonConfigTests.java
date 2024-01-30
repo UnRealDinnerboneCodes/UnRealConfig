@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GsonConfigTests {
 
@@ -138,12 +140,43 @@ public class GsonConfigTests {
         Assertions.assertEquals(TEST_JSON, s);
     }
 
+    private static final String TEST_EXISTING_DATA = """
+            {
+              "enabled": false
+            }""";
 
-    public class SimpleConfig {
+    private static final String TEST_EXISTING_DATA_WANTED = """
+            {
+              "enabled": true
+            }""";
+    @Test
+    public void testExistingData() throws IOException, ConfigException {
+        Path path1 = fileSystem.getPath("test_extra.json");
+        GsonProvider gsonProvider = new GsonProvider(path1, gson);
+        Files.writeString(path1, TEST_EXISTING_DATA);
+        SimpleEnabled simpleConfig = gsonProvider.loadConfig(SimpleEnabled::new);
+        simpleConfig.enabled.setValue(true);
+        gsonProvider.save();
+        String s = Files.readString(path1);
+        Assertions.assertEquals(TEST_EXISTING_DATA_WANTED, s);
+    }
+
+
+    public static class SimpleConfig {
 
         private final ConfigValue<String> config;
         public SimpleConfig(ConfigCreator creator) {
             this.config = creator.createString("config", "test");
+        }
+    }
+
+    public static class SimpleEnabled {
+
+        private final ConfigValue<Boolean> enabled;
+
+
+        public SimpleEnabled(ConfigCreator creator) {
+            this.enabled = creator.createBoolean("enabled", true);
         }
     }
 
