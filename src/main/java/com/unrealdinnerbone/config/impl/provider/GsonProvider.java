@@ -13,39 +13,47 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Function;
 
-
 public class GsonProvider extends Provider {
     private final Path path;
     private final boolean loadExtra;
+    private final boolean alertSaveBeforeRead;
 
+    private boolean hasRead = false;
     public GsonProvider(Path path, Gson gson)  {
         super(gson);
         this.path = path;
         this.loadExtra = true;
+        this.alertSaveBeforeRead = true;
     }
 
-    public GsonProvider(Path path, Gson gson, boolean loadExtra)  {
+    public GsonProvider(Path path, Gson gson, boolean loadExtra, boolean alertSaveBeforeRead)  {
         super(gson);
         this.path = path;
         this.loadExtra = loadExtra;
+        this.alertSaveBeforeRead = alertSaveBeforeRead;
     }
 
     @Override
     public void read() throws ConfigException {
         if (!Files.exists(path)) {
+            hasRead = true;
             save();
         }
         JsonObject jsonObject = gson.fromJson(readString(path), JsonObject.class);
         configCategory.fromJsonElement(gson, jsonObject);
+        hasRead = true;
     }
 
 
     @Override
     public boolean save() throws ConfigException {
+        if(alertSaveBeforeRead && !hasRead) {
+            throw new ConfigLoadException("You must read the config before you save it");
+        }
         JsonObject jsonElement = configCategory.asJsonElement(gson).getAsJsonObject();
         if(loadExtra && Files.exists(path)) {
             JsonObject readValue = gson.fromJson(readString(path), JsonObject.class);
-            mergeObject(jsonElement, readValue);
+            jsonElement = mergeObject(readValue, jsonElement);
         }
         writeString(path, gson.toJson(jsonElement));
         return true;
@@ -69,21 +77,23 @@ public class GsonProvider extends Provider {
     }
 
 
-    private static void mergeObject(JsonObject merging, JsonObject into) {
+    public static JsonObject mergeObject(JsonObject into, JsonObject merging) {
+        JsonObject newObject = into.deepCopy();
         for (String overrideKey : merging.keySet()) {
             JsonElement element = merging.get(overrideKey);
+
             if (element.isJsonObject()) {
                 JsonElement original = into.get(overrideKey);
                 if (original != null && original.isJsonObject()) {
                     mergeObject(original.getAsJsonObject(), element.getAsJsonObject());
                 } else {
-                    into.add(overrideKey, element);
+                    newObject.add(overrideKey, element);
                 }
             } else {
-                into.add(overrideKey, element);
+                newObject.add(overrideKey, element);
             }
-
         }
+        return newObject;
     }
 
 
