@@ -8,10 +8,15 @@ import com.unrealdinnerbone.config.api.exception.ConfigParseException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
+/*
+Todo add support for 'Dynamic' ConfigValue so like a ConfigValue<List<SOMETHING>> and that something is a ConfigValue
+* */
 public abstract class ConfigValue<T> {
 
     private final String id;
@@ -19,9 +24,12 @@ public abstract class ConfigValue<T> {
     @Nullable
     private T value;
 
+    private List<Consumer<ConfigValue<T>>> changeEvents;
+
     public ConfigValue(String id, @Nullable T initialValue) {
         this.id = id;
         this.value = initialValue;
+        this.changeEvents = new ArrayList<>();
     }
 
     public String getId() {
@@ -42,7 +50,7 @@ public abstract class ConfigValue<T> {
 
     public final void fromJsonElement(Gson gson, JsonElement jsonElement) throws ConfigParseException {
         try {
-            this.value = serialize(gson, jsonElement);
+            setValue(serialize(gson, jsonElement));
         }catch (Exception e) {
             throw new ConfigParseException("Could not parse config value", e);
         }
@@ -52,8 +60,15 @@ public abstract class ConfigValue<T> {
         return value == null ? JsonNull.INSTANCE : deserialize(gson, value);
     }
 
+
+    public void registerChangeHandler(Consumer<ConfigValue<T>> consumer) {
+        changeEvents.add(consumer);
+    }
+
+
     public void setValue(@Nullable T value) {
         this.value = value;
+        changeEvents.forEach(consumer -> consumer.accept(this));
     }
 
 
