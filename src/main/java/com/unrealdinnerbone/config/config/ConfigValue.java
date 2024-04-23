@@ -24,7 +24,7 @@ public abstract class ConfigValue<T> {
     @Nullable
     private T value;
 
-    private List<Consumer<ConfigValue<T>>> changeEvents;
+    private final List<Consumer<ConfigValue<T>>> changeEvents;
 
     public ConfigValue(String id, @Nullable T initialValue) {
         this.id = id;
@@ -71,6 +71,11 @@ public abstract class ConfigValue<T> {
         changeEvents.forEach(consumer -> consumer.accept(this));
     }
 
+    public void ifPresent(Consumer<T> consumer) {
+        if(value != null) {
+            consumer.accept(value);
+        }
+    }
 
     @ApiStatus.OverrideOnly
     protected abstract JsonElement deserialize(Gson gson, T value) throws ConfigParseException;
