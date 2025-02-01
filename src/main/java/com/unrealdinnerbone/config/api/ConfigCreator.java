@@ -28,6 +28,10 @@ public class ConfigCreator {
         return configValue;
     }
 
+    public <D, R extends ConfigValue<D>> R create(Function<Provider, R> creatorFunction) {
+        return create(creatorFunction.apply(category.getProvider()));
+    }
+
     public ConfigCategory createCategory(String name) {
         return create(new ConfigCategory(category.getProvider(), name));
     }
