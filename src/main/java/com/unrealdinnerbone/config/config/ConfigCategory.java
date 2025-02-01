@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.unrealdinnerbone.config.api.ConfigCreator;
+import com.unrealdinnerbone.config.api.Provider;
 import com.unrealdinnerbone.config.api.exception.ConfigParseException;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,8 +16,9 @@ import java.util.function.Function;
 public class ConfigCategory extends ConfigValue<List<ConfigValue<?>>> {
 
     private final ConfigCreator creator;
-    public ConfigCategory(String id) {
-        super(id, new ArrayList<>());
+
+    public ConfigCategory(Provider provider, String id) {
+        super(provider, id, new ArrayList<>());
         this.creator = new ConfigCreator(this);
     }
 
@@ -70,7 +72,7 @@ public class ConfigCategory extends ConfigValue<List<ConfigValue<?>>> {
         for (ConfigValue<?> configValue : value) {
             if(configValue.getId().isBlank()) {
                 jsonObject = configValue.asJsonElement(gson).getAsJsonObject();
-            }else {
+            } else {
                 if(configValue.get() != null) {
                     jsonObject.add(configValue.getId(), configValue.asJsonElement(gson));
                 }else {
@@ -84,7 +86,6 @@ public class ConfigCategory extends ConfigValue<List<ConfigValue<?>>> {
     public ConfigCreator getCreator() {
         return creator;
     }
-
 
     public <T> T addFromClass(Function<ConfigCreator, T> creatorTFunction) {
         return creatorTFunction.apply(creator);

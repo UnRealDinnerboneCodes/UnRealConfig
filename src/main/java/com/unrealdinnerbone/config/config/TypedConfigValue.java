@@ -3,6 +3,7 @@ package com.unrealdinnerbone.config.config;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
+import com.unrealdinnerbone.config.api.Provider;
 import com.unrealdinnerbone.config.api.exception.ConfigParseException;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,13 +13,13 @@ public class TypedConfigValue<T> extends ConfigValue<T> {
 
     private final Type type;
 
-    public TypedConfigValue(String id, @Nullable T defaultValue, Type type) {
-        super(id, defaultValue);
+    public TypedConfigValue(Provider provider, String id, @Nullable T defaultValue, Type type) {
+        super(provider, id, defaultValue);
         this.type = type;
     }
 
-    public TypedConfigValue(String id, @Nullable T defaultValue, Class<T> type) {
-        super(id, defaultValue);
+    public TypedConfigValue(Provider provider, String id, @Nullable T defaultValue, Class<T> type) {
+        super(provider, id, defaultValue);
         this.type = TypeToken.get(type).getType();
     }
 

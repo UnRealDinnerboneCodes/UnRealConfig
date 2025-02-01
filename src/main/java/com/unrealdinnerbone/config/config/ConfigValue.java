@@ -4,29 +4,32 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonPrimitive;
+import com.unrealdinnerbone.config.api.Provider;
+import com.unrealdinnerbone.config.api.exception.ConfigException;
 import com.unrealdinnerbone.config.api.exception.ConfigParseException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-/*
-Todo add support for 'Dynamic' ConfigValue so like a ConfigValue<List<SOMETHING>> and that something is a ConfigValue
-* */
 public abstract class ConfigValue<T> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigValue.class);
+
     private final String id;
+    private final List<Consumer<ConfigValue<T>>> changeEvents;
+    private final Provider provider;
 
     @Nullable
     private T value;
 
-    private final List<Consumer<ConfigValue<T>>> changeEvents;
-
-    public ConfigValue(String id, @Nullable T initialValue) {
+    public ConfigValue(Provider provider, String id, @Nullable T initialValue) {
+        this.provider = provider;
         this.id = id;
         this.value = initialValue;
         this.changeEvents = new ArrayList<>();
@@ -60,21 +63,42 @@ public abstract class ConfigValue<T> {
         return value == null ? JsonNull.INSTANCE : deserialize(gson, value);
     }
 
-
-    public void registerChangeHandler(Consumer<ConfigValue<T>> consumer) {
+    public ConfigValue<T> registerChangeHandler(Consumer<ConfigValue<T>> consumer) {
         changeEvents.add(consumer);
+        return this;
     }
 
-
+    @Deprecated(forRemoval = true)
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.5.0")
     public void setValue(@Nullable T value) {
         this.value = value;
         changeEvents.forEach(consumer -> consumer.accept(this));
+    }
+
+    public void setValue(@Nullable T value, boolean save) {
+        setValue(value);
+        if(save) {
+            try {
+                save();
+            }catch (ConfigException e) {
+                LOGGER.error("Could not save config", e);
+            }
+        }
     }
 
     public void ifPresent(Consumer<T> consumer) {
         if(value != null) {
             consumer.accept(value);
         }
+    }
+
+    public boolean save() throws ConfigException {
+        return provider.save();
+    }
+
+    @ApiStatus.Internal
+    public Provider getProvider() {
+        return provider;
     }
 
     @ApiStatus.OverrideOnly

@@ -13,8 +13,9 @@ public abstract class Provider {
 
     protected final ConfigCategory configCategory;
     protected final Gson gson;
+
     public Provider(Gson gson) {
-        this.configCategory = new ConfigCategory("");
+        this.configCategory = new ConfigCategory(this, "");
         this.gson = gson;
     }
 

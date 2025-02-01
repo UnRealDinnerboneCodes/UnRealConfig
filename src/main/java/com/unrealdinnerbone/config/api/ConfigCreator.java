@@ -1,6 +1,5 @@
 package com.unrealdinnerbone.config.api;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonParser;
@@ -8,21 +7,17 @@ import com.google.gson.reflect.TypeToken;
 import com.unrealdinnerbone.config.config.*;
 import com.unrealdinnerbone.config.config.ConfigCategory;
 import com.unrealdinnerbone.config.config.ConfigValue;
+import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ConfigCreator {
 
-
     private final ConfigCategory category;
-
     private boolean checkForDuplicates;
+
     public ConfigCreator(ConfigCategory category) {
         this.category = category;
         this.checkForDuplicates = true;
@@ -34,7 +29,7 @@ public class ConfigCreator {
     }
 
     public ConfigCategory createCategory(String name) {
-        return create(new ConfigCategory(name));
+        return create(new ConfigCategory(category.getProvider(), name));
     }
 
 
@@ -44,12 +39,12 @@ public class ConfigCreator {
     }
 
 
-    public <T> ConfigValue<T> createGeneric(String key, T defaultValue, Class<T> clazz) {
-        return create(new TypedConfigValue<>(key, defaultValue, clazz));
+    public <T> ConfigValue<T> createGeneric(String key, @Nullable T defaultValue, Class<T> clazz) {
+        return create(new TypedConfigValue<>(category.getProvider(), key, defaultValue, clazz));
     }
 
     public <K, V> ConfigValue<Map<K, V>> createMap(String key, Map<K, V> defaultValue, Class<K> kClass, Class<V> vClass) {
-        return create(new TypedConfigValue<>(key, defaultValue, TypeToken.getParameterized(Map.class, kClass, vClass).getType()) {
+        return create(new TypedConfigValue<>(category.getProvider(), key, defaultValue, TypeToken.getParameterized(Map.class, kClass, vClass).getType()) {
             @Override
             public JsonElement createElement(String string) {
                 return string == null ? JsonNull.INSTANCE : JsonParser.parseString("{" + string + "}").getAsJsonObject();
@@ -74,7 +69,7 @@ public class ConfigCreator {
     }
 
     public <E> ConfigValue<List<E>> createList(String key, List<E> defaultValue, Class<E> clazz) {
-        return create(new TypedConfigValue<>(key, defaultValue, TypeToken.getParameterized(List.class, clazz).getType()) {
+        return create(new TypedConfigValue<>(category.getProvider(), key, defaultValue, TypeToken.getParameterized(List.class, clazz).getType()) {
             @Override
             public JsonElement createElement(String string) {
                 return string == null ? JsonNull.INSTANCE : JsonParser.parseString("[" + string + "]").getAsJsonArray();
