@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import com.unrealdinnerbone.config.api.ConfigCreator;
 import com.unrealdinnerbone.config.api.Provider;
 import com.unrealdinnerbone.config.api.exception.ConfigParseException;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;

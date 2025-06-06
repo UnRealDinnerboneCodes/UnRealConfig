@@ -19,6 +19,7 @@ public class GsonProvider extends Provider {
     private final boolean alertSaveBeforeRead;
 
     private boolean hasRead = false;
+
     public GsonProvider(Path path, Gson gson)  {
         super(gson);
         this.path = path;

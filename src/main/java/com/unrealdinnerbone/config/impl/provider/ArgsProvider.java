@@ -1,19 +1,13 @@
 package com.unrealdinnerbone.config.impl.provider;
 
-import com.google.gson.JsonPrimitive;
-import com.unrealdinnerbone.config.api.ConfigCreator;
 import com.unrealdinnerbone.config.api.Provider;
 import com.unrealdinnerbone.config.api.exception.ConfigException;
 import com.unrealdinnerbone.config.api.exception.ConfigParseException;
 import com.unrealdinnerbone.config.config.ConfigCategory;
 import com.unrealdinnerbone.config.config.ConfigValue;
-import com.unrealdinnerbone.config.config.TypedConfigValue;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 public class ArgsProvider extends Provider {
     private final Map<String, String> args = new HashMap<>();

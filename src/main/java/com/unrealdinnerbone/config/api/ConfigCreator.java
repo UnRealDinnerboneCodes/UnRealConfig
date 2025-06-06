@@ -1,14 +1,11 @@
 package com.unrealdinnerbone.config.api;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import com.unrealdinnerbone.config.config.*;
 import com.unrealdinnerbone.config.config.ConfigCategory;
 import com.unrealdinnerbone.config.config.ConfigValue;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -36,27 +33,20 @@ public class ConfigCreator {
         return create(new ConfigCategory(category.getProvider(), name));
     }
 
-
     public <T> T createCategory(String name, Function<ConfigCreator, T> creatorFunction) {
         ConfigCreator group = createCategory(name).getCreator();
         return creatorFunction.apply(group);
     }
 
-
     public <T> ConfigValue<T> createGeneric(String key, @Nullable T defaultValue, Class<T> clazz) {
         return create(new TypedConfigValue<>(category.getProvider(), key, defaultValue, clazz));
     }
 
-    public <K, V> ConfigValue<Map<K, V>> createMap(String key, Map<K, V> defaultValue, Class<K> kClass, Class<V> vClass) {
-        return create(new TypedConfigValue<>(category.getProvider(), key, defaultValue, TypeToken.getParameterized(Map.class, kClass, vClass).getType()) {
-            @Override
-            public JsonElement createElement(String string) {
-                return string == null ? JsonNull.INSTANCE : JsonParser.parseString("{" + string + "}").getAsJsonObject();
-            }
-        });
+    public <K, V> MapConfigValue<K, V> createMap(String key, Map<K, V> defaultValue, Class<K> kClass, Class<V> vClass) {
+        return create(new MapConfigValue<>(category.getProvider(), key, defaultValue, kClass, vClass));
     }
 
-    public <V> ConfigValue<Map<String, V>> createMap(String key, Map<String, V> defaultValue, Class<V> clazz) {
+    public <V> MapConfigValue<String, V> createMap(String key, Map<String, V> defaultValue, Class<V> clazz) {
         return createMap(key, defaultValue, String.class, clazz);
     }
 
@@ -72,14 +62,14 @@ public class ConfigCreator {
         return createGeneric(key, defaultValue, eClass);
     }
 
-    public <E> ConfigValue<List<E>> createList(String key, List<E> defaultValue, Class<E> clazz) {
-        return create(new TypedConfigValue<>(category.getProvider(), key, defaultValue, TypeToken.getParameterized(List.class, clazz).getType()) {
-            @Override
-            public JsonElement createElement(String string) {
-                return string == null ? JsonNull.INSTANCE : JsonParser.parseString("[" + string + "]").getAsJsonArray();
-            }
-        });
+    public <E> ListConfigValue<E> createList(String key, List<E> defaultValue, Class<E> clazz) {
+        return create(new ListConfigValue<>(category.getProvider(), key, defaultValue, clazz));
     }
+    
+    public <E> ListConfigValue<E> createList(String key, Class<E> clazz) {
+        return createList(key, new ArrayList<>(), clazz);
+    }
+
     public ConfigValue<Float> createFloat(String key, float defaultValue) {
         return createGeneric(key, defaultValue, Float.class);
     }

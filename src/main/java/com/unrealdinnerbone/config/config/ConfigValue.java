@@ -7,6 +7,7 @@ import com.google.gson.JsonPrimitive;
 import com.unrealdinnerbone.config.api.Provider;
 import com.unrealdinnerbone.config.api.exception.ConfigException;
 import com.unrealdinnerbone.config.api.exception.ConfigParseException;
+import com.unrealdinnerbone.config.api.exception.ConfigRuntimeException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -94,6 +95,14 @@ public abstract class ConfigValue<T> {
 
     public boolean save() throws ConfigException {
         return provider.save();
+    }
+
+    public boolean trySave() throws ConfigRuntimeException {
+        try {
+            return save();
+        } catch (ConfigException e) {
+            throw new ConfigRuntimeException("Failed to save config value: " + id, e);
+        }
     }
 
     @ApiStatus.Internal
