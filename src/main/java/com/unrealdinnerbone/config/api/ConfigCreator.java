@@ -12,12 +12,17 @@ import java.util.function.Function;
 
 public class ConfigCreator {
 
-    private final ConfigCategory category;
-    private boolean checkForDuplicates;
+    protected final ConfigCategory category;
+    protected boolean checkForDuplicates;
 
     public ConfigCreator(ConfigCategory category) {
         this.category = category;
         this.checkForDuplicates = true;
+    }
+
+    protected ConfigCreator(ConfigCreator category) {
+        this.category = category.category;
+        this.checkForDuplicates = category.checkForDuplicates;
     }
 
     public <D, R extends ConfigValue<D>> R create(R configValue) {
@@ -65,7 +70,7 @@ public class ConfigCreator {
     public <E> ListConfigValue<E> createList(String key, List<E> defaultValue, Class<E> clazz) {
         return create(new ListConfigValue<>(category.getProvider(), key, defaultValue, clazz));
     }
-    
+
     public <E> ListConfigValue<E> createList(String key, Class<E> clazz) {
         return createList(key, new ArrayList<>(), clazz);
     }
@@ -85,5 +90,4 @@ public class ConfigCreator {
     public void setCheckForDuplicates(boolean checkForDuplicates) {
         this.checkForDuplicates = checkForDuplicates;
     }
-
 }
